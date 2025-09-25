@@ -1,0 +1,433 @@
+{
+    "auxiliary scripts": null,
+    "certificates": null,
+    "collateral inputs": [
+        "7bc66e2952924202138e220bbb3d741ff80114b0d83ccae270bae41db5ee2795#5"
+    ],
+    "currentTreasuryValue": null,
+    "datums": [],
+    "era": "Conway",
+    "fee": "170000 Lovelace",
+    "governance actions": [],
+    "inputs": [
+        "7bc66e2952924202138e220bbb3d741ff80114b0d83ccae270bae41db5ee2795#6",
+        "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#1",
+        "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#2"
+    ],
+    "metadata": {
+        "674": [
+            [
+                "msg",
+                [
+                    "Danogo Fixed-Rate Lending: Create Loan"
+                ]
+            ]
+        ],
+        "721": [
+            [
+                "version",
+                2
+            ],
+            [
+                "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505",
+                [
+                    [
+                        "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd",
+                        [
+                            [
+                                "debt",
+                                "101.69644 ADA"
+                            ],
+                            [
+                                "name",
+                                "Borrower NFT (Fixed Rate Lending)"
+                            ],
+                            [
+                                "image",
+                                "ipfs://QmWpzeJwioirfFWFwDvxmETjemo2yVbnk16zz74U6a46Gz"
+                            ],
+                            [
+                                "website",
+                                "https://danogo.io"
+                            ],
+                            [
+                                "duration",
+                                "60 days"
+                            ],
+                            [
+                                "maturity",
+                                "2025-09-25 08:41:33 UTC"
+                            ],
+                            [
+                                "description",
+                                "An NFT representing the loan principal and interest by Danogo"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    },
+    "mint": {
+        "policy 7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b": {
+            "asset 32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558": -99412053
+        },
+        "policy e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505": {
+            "asset 60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": 1,
+            "asset 7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a": 1
+        }
+    },
+    "outputs": [
+        {
+            "address": "addr_test1wpa4jh7euu9kyh9w4n3wyzkfru5junx875g2y0ahryttw6clekqft",
+            "address era": "Shelley",
+            "amount": {
+                "lovelace": 21355265901,
+                "policy 5bc56ab821b1efbce5be150bd97613c577f32167611211ef742c71f0": {
+                    "asset 32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558": 1
+                },
+                "policy 7aa4312097def38936c7b69fb380f9e8685dfa17c52c68151781ea03": {
+                    "default asset": 322518612404
+                }
+            },
+            "datum": {
+                "constructor": 0,
+                "fields": [
+                    {
+                        "int": 362489357461
+                    },
+                    {
+                        "int": 360358111120
+                    },
+                    {
+                        "int": 1931950094
+                    },
+                    {
+                        "int": 504
+                    },
+                    {
+                        "int": 412868
+                    },
+                    {
+                        "int": 1006696637138
+                    },
+                    {
+                        "int": 1758768093000
+                    },
+                    {
+                        "list": [
+                            {
+                                "constructor": 0,
+                                "fields": [
+                                    {
+                                        "int": 268222978039
+                                    },
+                                    {
+                                        "int": 255026462635
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "network": "Testnet",
+            "payment credential script hash": "7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b",
+            "reference script": null,
+            "stake reference": null
+        },
+        {
+            "address": "addr_test1zralu95guc0lpefd58xt4udn5cquv6m8qfedmd0pjl9rn0g8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asu0esez",
+            "address era": "Shelley",
+            "amount": {
+                "lovelace": 2228270,
+                "policy 7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b": {
+                    "asset 32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558": 894708477
+                },
+                "policy fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd": {
+                    "asset 7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a": 1
+                }
+            },
+            "datum": {
+                "constructor": 0,
+                "fields": [
+                    {
+                        "list": [
+                            {
+                                "list": [
+                                    {
+                                        "bytes": "7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b"
+                                    },
+                                    {
+                                        "bytes": "32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558"
+                                    }
+                                ]
+                            },
+                            {
+                                "list": [
+                                    {
+                                        "bytes": ""
+                                    },
+                                    {
+                                        "bytes": ""
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "int": 999999999
+                    },
+                    {
+                        "int": 999999999
+                    },
+                    {
+                        "int": 1758844800000
+                    },
+                    {
+                        "map": [
+                            {
+                                "k": {
+                                    "list": [
+                                        {
+                                            "bytes": "919d4c2c9455016289341b1a14dedf697687af31751170d56a31466e"
+                                        },
+                                        {
+                                            "bytes": "74444a4544"
+                                        }
+                                    ]
+                                },
+                                "v": {
+                                    "int": 8000
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "int": 2000
+                    },
+                    {
+                        "int": 1800
+                    },
+                    {
+                        "int": 64800000
+                    },
+                    {
+                        "int": 1
+                    },
+                    {
+                        "constructor": 0,
+                        "fields": []
+                    },
+                    {
+                        "int": 100000000
+                    }
+                ]
+            },
+            "network": "Testnet",
+            "payment credential script hash": "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd",
+            "reference script": null,
+            "stake reference": {
+                "stake credential key hash": "0745b7e415e1757f4cb58e3cc85d12c101078214546880cae6151abb"
+            }
+        },
+        {
+            "address": "addr_test1vq0p9axxfcn53mz66vpcpxw5qtrurn9edftz4rg7wrdu40cp668qs",
+            "address era": "Shelley",
+            "amount": {
+                "lovelace": 1000001
+            },
+            "network": "Testnet",
+            "payment credential key hash": "1e12f4c64e2748ec5ad3038099d402c7c1ccb96a562a8d1e70dbcabf",
+            "reference script": null,
+            "stake reference": null
+        },
+        {
+            "address": "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs",
+            "address era": "Shelley",
+            "amount": {
+                "lovelace": 2000000,
+                "policy 919d4c2c9455016289341b1a14dedf697687af31751170d56a31466e": {
+                    "asset 74444a4544 (tDJED)": 142770657
+                },
+                "policy e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505": {
+                    "asset 7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a": 1
+                }
+            },
+            "datum": {
+                "constructor": 0,
+                "fields": [
+                    {
+                        "int": 169644
+                    },
+                    {
+                        "int": 101696440
+                    },
+                    {
+                        "int": 1758789693000
+                    },
+                    {
+                        "bytes": "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd"
+                    }
+                ]
+            },
+            "network": "Testnet",
+            "payment credential script hash": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505",
+            "reference script": null,
+            "stake reference": {
+                "stake credential key hash": "0745b7e415e1757f4cb58e3cc85d12c101078214546880cae6151abb"
+            }
+        },
+        {
+            "address": "addr_test1qpnsm3hpy0syc2n4lg4qskfn3ru5g87mw9n024y8fxxju0s8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2as9alxga",
+            "address era": "Shelley",
+            "amount": {
+                "lovelace": 101730629,
+                "policy 919d4c2c9455016289341b1a14dedf697687af31751170d56a31466e": {
+                    "asset 7441474958 (tAGIX)": 100000000000,
+                    "asset 74434f5049 (tCOPI)": 1000000000,
+                    "asset 74444149 (tDAI)": 1000000000,
+                    "asset 74444a4544 (tDJED)": 857229343,
+                    "asset 74455247 (tERG)": 1000000000000,
+                    "asset 74494147 (tIAG)": 1000000000,
+                    "asset 7449555344 (tIUSD)": 1000000000,
+                    "asset 744d494e (tMIN)": 1000000000,
+                    "asset 745348454e (tSHEN)": 1000000000,
+                    "asset 74534e454b (tSNEK)": 1000,
+                    "asset 7455534443 (tUSDC)": 100000000000,
+                    "asset 7455534454 (tUSDT)": 100000000000,
+                    "asset 74574d54 (tWMT)": 1000000000
+                },
+                "policy e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505": {
+                    "asset 60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": 1
+                },
+                "policy fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd": {
+                    "asset 50542d2529958bb1c6df1d1d60f11db4531fa60ae8e4cd359e8f1449a660e2": 999999999,
+                    "asset 50542d633c51da90a8fa6ba17d832b6b5097b63600d8db5d5e06eeb82a8c51": 999999999,
+                    "asset 50542d86b63fb3409c42993f0bd82ecd23bb903b74ad1e8f7b3ff127071eaf": 999999999,
+                    "asset 59542d2529958bb1c6df1d1d60f11db4531fa60ae8e4cd359e8f1449a660e2": 999999999,
+                    "asset 59542d633c51da90a8fa6ba17d832b6b5097b63600d8db5d5e06eeb82a8c51": 999999999,
+                    "asset 59542d86b63fb3409c42993f0bd82ecd23bb903b74ad1e8f7b3ff127071eaf": 999999999
+                }
+            },
+            "network": "Testnet",
+            "payment credential key hash": "670dc6e123e04c2a75fa2a08593388f9441fdb7166f55487498d2e3e",
+            "reference script": null,
+            "stake reference": {
+                "stake credential key hash": "0745b7e415e1757f4cb58e3cc85d12c101078214546880cae6151abb"
+            }
+        }
+    ],
+    "redeemers": [
+        {
+            "purpose": {
+                "spending script witnessed input": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#1"
+            },
+            "redeemer": {
+                "data": "Constr 2 [I 4,List [Constr 0 [I 0,Constr 1 [],I 7]]]",
+                "execution units": {
+                    "memory": 0,
+                    "steps": 0
+                }
+            }
+        },
+        {
+            "purpose": {
+                "spending script witnessed input": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#2"
+            },
+            "redeemer": {
+                "data": "Constr 0 [Constr 2 [I 1,I 3],I 2,I (-1),I 6,I 3,I 2]",
+                "execution units": {
+                    "memory": 0,
+                    "steps": 0
+                }
+            }
+        },
+        {
+            "purpose": {
+                "minting currency with policy id": "7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b"
+            },
+            "redeemer": {
+                "data": "Constr 2 [I 4,List [Constr 0 [I 0,Constr 1 [],I 7]]]",
+                "execution units": {
+                    "memory": 0,
+                    "steps": 0
+                }
+            }
+        },
+        {
+            "purpose": {
+                "minting currency with policy id": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505"
+            },
+            "redeemer": {
+                "data": "Constr 0 [Constr 2 [I 1,I 3],I 2,I (-1),I 6,I 3,I 2]",
+                "execution units": {
+                    "memory": 0,
+                    "steps": 0
+                }
+            }
+        },
+        {
+            "purpose": {
+                "withdrawing reward from script address": {
+                    "credential": {
+                        "scriptHash": "a2fa8564c279ca144d69bbbd37057f5d3d42e59555bc3bfb874919f6"
+                    },
+                    "network": "Testnet"
+                }
+            },
+            "redeemer": {
+                "data": "Constr 0 [I 8,List [I 5],List [List [Constr 1 [],Constr 5 [],I 0],List [Constr 0 [],Constr 8 [],I 10],List [Constr 0 [],Constr 7 [],I 11]],Map [(List [B \"\",B \"\"],Map [(List [B \"z\\164\\&1 \\151\\222\\243\\137\\&6\\199\\182\\159\\179\\128\\249\\232h]\\250\\ETB\\197,h\\NAK\\ETB\\129\\234\\ETX\",B \"\"],Constr 0 [I 268222978039,I 255026462635]),(List [B \"\\145\\157L,\\148U\\SOHb\\137\\&4\\ESC\\SUB\\DC4\\222\\223iv\\135\\175\\&1u\\DC1p\\213j1Fn\",B \"tDJED\"],Constr 0 [I 221758,I 155667]),(List [B \"{Y_\\217\\231\\vb\\\\\\174\\172\\226\\226\\n\\201\\US).L\\199\\245\\DLE\\162?\\183\\EM\\SYN\\183k\",B \"2\\196\\CAN\\NAK\\210p\\164\\204\\139\\228\\188\\157=\\ETB\\NAKF\\180M6\\203W\\170{\\139\\ENQa\\133X\"],Constr 0 [I 51784193923,I 51479730160])])],Map [(List [B \"{Y_\\217\\231\\vb\\\\\\174\\172\\226\\226\\n\\201\\US).L\\199\\245\\DLE\\162?\\183\\EM\\SYN\\183k\",B \"2\\196\\CAN\\NAK\\210p\\164\\204\\139\\228\\188\\157=\\ETB\\NAKF\\180M6\\203W\\170{\\139\\ENQa\\133X\"],I 504)]]",
+                "execution units": {
+                    "memory": 0,
+                    "steps": 0
+                }
+            }
+        }
+    ],
+    "reference inputs": [
+        "15c60cb9a9b8783d6310844dbfef11239b33a10e4c30d80f387b5653de80b385#0",
+        "4bd11ee91e4b1e8322f094a3dc9b92eb9a28036580ef35012b4261234df8f321#0",
+        "8a7b8a548cb04398eaa78e4160046f749e5ba865168489e751a173c3a99266ea#0",
+        "a64d419e6d45e05d7c29fe158bb4528dd145172d52d3ea21bc90362eb42f6d23#0",
+        "ae98a2ad6804b0638cb0589d5390e3fedc515d79d555ac497ee0ec3fdb554824#0",
+        "c0ff515afd3dc5b5e1ae0242ce6aa1e1ac58bcd93e3672d38be7dc31d256bf26#0",
+        "c2e5a4d2c2b1d5d26a80f2675d53e4a64058f4e9745868c133090aab9952936a#0",
+        "c4af5ec19e3c78295ceee0d65be77132c991bd93350642fbadae3342cd708742#0",
+        "cb0cbaf47214ecc9284e204bb593842c48e5c820cf8eb8364fdfec288ffdc012#0",
+        "cb65a0baf837a3c079f3b38133dc6e8ce1e42db2159b03209ed8668d2ae2c198#0",
+        "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#0",
+        "fd3406c4a6e51e21178542e0370d37acd996aab26d744d7afef09c73ca123f68#0"
+    ],
+    "required signers (payment key hashes needed for scripts)": null,
+    "return collateral": {
+        "address": "addr_test1qpnsm3hpy0syc2n4lg4qskfn3ru5g87mw9n024y8fxxju0s8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2as9alxga",
+        "address era": "Shelley",
+        "amount": {
+            "lovelace": 4745000
+        },
+        "network": "Testnet",
+        "payment credential key hash": "670dc6e123e04c2a75fa2a08593388f9441fdb7166f55487498d2e3e",
+        "reference script": null,
+        "stake reference": {
+            "stake credential key hash": "0745b7e415e1757f4cb58e3cc85d12c101078214546880cae6151abb"
+        }
+    },
+    "scripts": [],
+    "total collateral": 255000,
+    "treasuryDonation": 0,
+    "update proposal": null,
+    "validity range": {
+        "lower bound": 92112093,
+        "upper bound": 92112453
+    },
+    "voters": {},
+    "withdrawals": [
+        {
+            "address": "stake_test17z304ptycfuu59zddxam6dc90awn6sh9j42mcwlmsay3nasqdt5fm",
+            "amount": "0 Lovelace",
+            "network": "Testnet",
+            "stake credential script hash": "a2fa8564c279ca144d69bbbd37057f5d3d42e59555bc3bfb874919f6"
+        }
+    ]
+}

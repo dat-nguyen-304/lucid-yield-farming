@@ -1,0 +1,646 @@
+84                                                               # array(4)
+   ad                                                            #   map(13)
+      00                                                         #     unsigned(0)
+      d9 0102                                                    #     tag(258)
+         83                                                      #       array(3)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  1e474b25e7e2339e674c0a12ab10845a               #             "\x1eGK%\xe7\xe23\x9egL\n\x12\xab\x10\x84Z"
+                  84946996b3efb86514aecfea78b22c6e               #             "\x84\x94i\x96\xb3\xef\xb8e\x14\xae\xcf\xeax\xb2,n"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  1e474b25e7e2339e674c0a12ab10845a               #             "\x1eGK%\xe7\xe23\x9egL\n\x12\xab\x10\x84Z"
+                  84946996b3efb86514aecfea78b22c6e               #             "\x84\x94i\x96\xb3\xef\xb8e\x14\xae\xcf\xeax\xb2,n"
+               01                                                #           unsigned(1)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  a26bd4c7cb49c76ee21b27c5d8c26767               #             "\xa2k\xd4\xc7\xcbI\xc7n\xe2\x1b\'\xc5\xd8\xc2gg"
+                  0b4eef325f0f4f5ed13a283fffed487d               #             "\x0bN\xef2_\x0fO^\xd1:(?\xff\xedH}"
+               00                                                #           unsigned(0)
+      01                                                         #     unsigned(1)
+      85                                                         #     array(5)
+         a3                                                      #       map(3)
+            00                                                   #         unsigned(0)
+            58 1d                                                #         bytes(29)
+               707b595fd9e70b625caeace2e20ac91f                  #           "p{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f"
+               292e4cc7f510a23fb71916b76b                        #           ").L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+            01                                                   #         unsigned(1)
+            82                                                   #         array(2)
+               1b 000000013f293daa                               #           unsigned(5,354,634,666)
+               a2                                                #           map(2)
+                  58 1c                                          #             bytes(28)
+                     5bc56ab821b1efbce5be150bd97613c5            #               "[\xc5j\xb8!\xb1\xef\xbc\xe5\xbe\x15\x0b\xd9v\x13\xc5"
+                     77f32167611211ef742c71f0                    #               "w\xf3!ga\x12\x11\xeft,q\xf0"
+                  a1                                             #             map(1)
+                     58 1c                                       #               bytes(28)
+                        32c41815d270a4cc8be4bc9d3d171546         #                 "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+                        b44d36cb57aa7b8b05618558                 #                 "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+                     01                                          #               unsigned(1)
+                  58 1c                                          #             bytes(28)
+                     7aa4312097def38936c7b69fb380f9e8            #               "z\xa41 \x97\xde\xf3\x896\xc7\xb6\x9f\xb3\x80\xf9\xe8"
+                     685dfa17c52c68151781ea03                    #               "h]\xfa\x17\xc5,h\x15\x17\x81\xea\x03"
+                  a1                                             #             map(1)
+                     40                                          #               bytes(0)
+                                                                 #                 ""
+                     1b 0000004b179b79b4                         #               unsigned(322,518,612,404)
+            02                                                   #         unsigned(2)
+            82                                                   #         array(2)
+               01                                                #           unsigned(1)
+               d8 18                                             #           encoded cbor data item, tag(24)
+                  58 4d                                          #             bytes(77)
+                     d8799f1b00000050911266931b000000            #               "\xd8y\x9f\x1b\x00\x00\x00P\x91\x12f\x93\x1b\x00\x00\x00"
+                     50327f0aa41a731b14bb1901f81a0003            #               "P2\x7f\n\xa4\x1as\x1b\x14\xbb\x19\x01\xf8\x1a\x00\x03"
+                     df461b000000ea4b16b8281b00000199            #               "\xdfF\x1b\x00\x00\x00\xeaK\x16\xb8(\x1b\x00\x00\x01\x99"
+                     6f6303809fd8799f1b000000ba2b13fa            #               "oc\x03\x80\x9f\xd8y\x9f\x1b\x00\x00\x00\xba+\x13\xfa"
+                     781b000000b13f5e063dffffff                  #               "x\x1b\x00\x00\x00\xb1?^\x06=\xff\xff\xff"
+                                                                 #             encoded cbor data item
+                                                                 #               d8 79                              # tag(121)
+                                                                 #                  9f                              #   array(*)
+                                                                 #                     1b 0000005091126693          #     unsigned(346,031,285,907)
+                                                                 #                     1b 00000050327f0aa4          #     unsigned(344,444,570,276)
+                                                                 #                     1a 731b14bb                  #     unsigned(1,931,154,619)
+                                                                 #                     19 01f8                      #     unsigned(504)
+                                                                 #                     1a 0003df46                  #     unsigned(253,766)
+                                                                 #                     1b 000000ea4b16b828          #     unsigned(1,006,282,127,400)
+                                                                 #                     1b 000001996f630380          #     unsigned(1,758,510,384,000)
+                                                                 #                     9f                           #     array(*)
+                                                                 #                        d8 79                     #       tag(121)
+                                                                 #                           9f                     #         array(*)
+                                                                 #                              1b 000000ba2b13fa78 #           unsigned(799,586,646,648)
+                                                                 #                              1b 000000b13f5e063d #           unsigned(761,272,337,981)
+                                                                 #                              ff                  #           break
+                                                                 #                        ff                        #       break
+                                                                 #                     ff                           #     break
+         a3                                                      #       map(3)
+            00                                                   #         unsigned(0)
+            58 39                                                #         bytes(57)
+               10fbfe1688e61ff0e52da1ccbaf1b3a6                  #           "\x10\xfb\xfe\x16\x88\xe6\x1f\xf0\xe5-\xa1\xcc\xba\xf1\xb3\xa6"
+               01c66b670272ddb5e197ca39bd0745b7                  #           "\x01\xc6kg\x02r\xdd\xb5\xe1\x97\xca9\xbd\x07E\xb7"
+               e415e1757f4cb58e3cc85d12c1010782                  #           "\xe4\x15\xe1u\x7fL\xb5\x8e<\xc8]\x12\xc1\x01\x07\x82"
+               14546880cae6151abb                                #           "\x14Th\x80\xca\xe6\x15\x1a\xbb"
+            01                                                   #         unsigned(1)
+            82                                                   #         array(2)
+               1a 0022002e                                       #           unsigned(2,228,270)
+               a2                                                #           map(2)
+                  58 1c                                          #             bytes(28)
+                     7b595fd9e70b625caeace2e20ac91f29            #               "{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f)"
+                     2e4cc7f510a23fb71916b76b                    #               ".L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+                  a1                                             #             map(1)
+                     58 1c                                       #               bytes(28)
+                        32c41815d270a4cc8be4bc9d3d171546         #                 "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+                        b44d36cb57aa7b8b05618558                 #                 "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+                     1a 3565f043                                 #               unsigned(895,873,091)
+                  58 1c                                          #             bytes(28)
+                     fbfe1688e61ff0e52da1ccbaf1b3a601            #               "\xfb\xfe\x16\x88\xe6\x1f\xf0\xe5-\xa1\xcc\xba\xf1\xb3\xa6\x01"
+                     c66b670272ddb5e197ca39bd                    #               "\xc6kg\x02r\xdd\xb5\xe1\x97\xca9\xbd"
+                  a1                                             #             map(1)
+                     58 1c                                       #               bytes(28)
+                        edd5e8a4cf2b03d18e1dadefa00943d7         #                 "\xed\xd5\xe8\xa4\xcf+\x03\xd1\x8e\x1d\xad\xef\xa0\tC\xd7"
+                        fbf01cb54f0269db00fab2af                 #                 "\xfb\xf0\x1c\xb5O\x02i\xdb\x00\xfa\xb2\xaf"
+                     01                                          #               unsigned(1)
+            02                                                   #         unsigned(2)
+            82                                                   #         array(2)
+               01                                                #           unsigned(1)
+               d8 18                                             #           encoded cbor data item, tag(24)
+                  58 99                                          #             bytes(153)
+                     d8799f9f9f581c7b595fd9e70b625cae            #               "\xd8y\x9f\x9f\x9fX\x1c{Y_\xd9\xe7\x0bb\\\xae"
+                     ace2e20ac91f292e4cc7f510a23fb719            #               "\xac\xe2\xe2\n\xc9\x1f).L\xc7\xf5\x10\xa2?\xb7\x19"
+                     16b76b581c32c41815d270a4cc8be4bc            #               "\x16\xb7kX\x1c2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc"
+                     9d3d171546b44d36cb57aa7b8b056185            #               "\x9d=\x17\x15F\xb4M6\xcbW\xaa{\x8b\x05a\x85"
+                     58ff9f4040ffff1a3b9ac9ff1a3b9ac9            #               "X\xff\x9f@@\xff\xff\x1a;\x9a\xc9\xff\x1a;\x9a\xc9"
+                     ff1b0000019973deb800a19f581c919d            #               "\xff\x1b\x00\x00\x01\x99s\xde\xb8\x00\xa1\x9fX\x1c\x91\x9d"
+                     4c2c9455016289341b1a14dedf697687            #               "L,\x94U\x01b\x894\x1b\x1a\x14\xde\xdfiv\x87"
+                     af31751170d56a31466e4574444a4544            #               "\xaf1u\x11p\xd5j1FnEtDJED"
+                     ff191f401907d01907081a03dcc50001            #               "\xff\x19\x1f@\x19\x07\xd0\x19\x07\x08\x1a\x03\xdc\xc5\x00\x01"
+                     d879801a05f5e100ff                          #               "\xd8y\x80\x1a\x05\xf5\xe1\x00\xff"
+                                                                 #             encoded cbor data item
+                                                                 #               d8 79                                           # tag(121)
+                                                                 #                  9f                                           #   array(*)
+                                                                 #                     9f                                        #     array(*)
+                                                                 #                        9f                                     #       array(*)
+                                                                 #                           58 1c                               #         bytes(28)
+                                                                 #                              7b595fd9e70b625caeace2e20ac91f29 #           "{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f)"
+                                                                 #                              2e4cc7f510a23fb71916b76b         #           ".L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+                                                                 #                           58 1c                               #         bytes(28)
+                                                                 #                              32c41815d270a4cc8be4bc9d3d171546 #           "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+                                                                 #                              b44d36cb57aa7b8b05618558         #           "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+                                                                 #                           ff                                  #         break
+                                                                 #                        9f                                     #       array(*)
+                                                                 #                           40                                  #         bytes(0)
+                                                                 #                                                               #           ""
+                                                                 #                           40                                  #         bytes(0)
+                                                                 #                                                               #           ""
+                                                                 #                           ff                                  #         break
+                                                                 #                        ff                                     #       break
+                                                                 #                     1a 3b9ac9ff                               #     unsigned(999,999,999)
+                                                                 #                     1a 3b9ac9ff                               #     unsigned(999,999,999)
+                                                                 #                     1b 0000019973deb800                       #     unsigned(1,758,585,600,000)
+                                                                 #                     a1                                        #     map(1)
+                                                                 #                        9f                                     #       array(*)
+                                                                 #                           58 1c                               #         bytes(28)
+                                                                 #                              919d4c2c9455016289341b1a14dedf69 #           "\x91\x9dL,\x94U\x01b\x894\x1b\x1a\x14\xde\xdfi"
+                                                                 #                              7687af31751170d56a31466e         #           "v\x87\xaf1u\x11p\xd5j1Fn"
+                                                                 #                           45                                  #         bytes(5)
+                                                                 #                              74444a4544                       #           "tDJED"
+                                                                 #                           ff                                  #         break
+                                                                 #                        19 1f40                                #       unsigned(8,000)
+                                                                 #                     19 07d0                                   #     unsigned(2,000)
+                                                                 #                     19 0708                                   #     unsigned(1,800)
+                                                                 #                     1a 03dcc500                               #     unsigned(64,800,000)
+                                                                 #                     01                                        #     unsigned(1)
+                                                                 #                     d8 79                                     #     tag(121)
+                                                                 #                        80                                     #       array(0)
+                                                                 #                     1a 05f5e100                               #     unsigned(100,000,000)
+                                                                 #                     ff                                        #     break
+         82                                                      #       array(2)
+            58 1d                                                #         bytes(29)
+               601e12f4c64e2748ec5ad3038099d402                  #           "`\x1e\x12\xf4\xc6N\'H\xecZ\xd3\x03\x80\x99\xd4\x02"
+               c7c1ccb96a562a8d1e70dbcabf                        #           "\xc7\xc1\xcc\xb9jV*\x8d\x1ep\xdb\xca\xbf"
+            1a 000f4241                                          #         unsigned(1,000,001)
+         a3                                                      #       map(3)
+            00                                                   #         unsigned(0)
+            58 39                                                #         bytes(57)
+               10e1a6483473a5d6108ed2ed7f452a2d                  #           "\x10\xe1\xa6H4s\xa5\xd6\x10\x8e\xd2\xed\x7fE*-"
+               5b3bec5aeabbe333bf5e6b25050745b7                  #           "[;\xecZ\xea\xbb\xe33\xbf^k%\x05\x07E\xb7"
+               e415e1757f4cb58e3cc85d12c1010782                  #           "\xe4\x15\xe1u\x7fL\xb5\x8e<\xc8]\x12\xc1\x01\x07\x82"
+               14546880cae6151abb                                #           "\x14Th\x80\xca\xe6\x15\x1a\xbb"
+            01                                                   #         unsigned(1)
+            82                                                   #         array(2)
+               1a 001e8480                                       #           unsigned(2,000,000)
+               a2                                                #           map(2)
+                  58 1c                                          #             bytes(28)
+                     919d4c2c9455016289341b1a14dedf69            #               "\x91\x9dL,\x94U\x01b\x894\x1b\x1a\x14\xde\xdfi"
+                     7687af31751170d56a31466e                    #               "v\x87\xaf1u\x11p\xd5j1Fn"
+                  a1                                             #             map(1)
+                     45                                          #               bytes(5)
+                        74444a4544                               #                 "tDJED"
+                     1a 088281e1                                 #               unsigned(142,770,657)
+                  58 1c                                          #             bytes(28)
+                     e1a6483473a5d6108ed2ed7f452a2d5b            #               "\xe1\xa6H4s\xa5\xd6\x10\x8e\xd2\xed\x7fE*-["
+                     3bec5aeabbe333bf5e6b2505                    #               ";\xecZ\xea\xbb\xe33\xbf^k%\x05"
+                  a1                                             #             map(1)
+                     58 1c                                       #               bytes(28)
+                        edd5e8a4cf2b03d18e1dadefa00943d7         #                 "\xed\xd5\xe8\xa4\xcf+\x03\xd1\x8e\x1d\xad\xef\xa0\tC\xd7"
+                        fbf01cb54f0269db00fab2af                 #                 "\xfb\xf0\x1c\xb5O\x02i\xdb\x00\xfa\xb2\xaf"
+                     01                                          #               unsigned(1)
+            02                                                   #         unsigned(2)
+            82                                                   #         array(2)
+               01                                                #           unsigned(1)
+               d8 18                                             #           encoded cbor data item, tag(24)
+                  58 39                                          #             bytes(57)
+                     d8799f1a000296ac1a060fc3b81b0000            #               "\xd8y\x9f\x1a\x00\x02\x96\xac\x1a\x06\x0f\xc3\xb8\x1b\x00\x00"
+                     019970ac9a805820f033f5521d2ea201            #               "\x01\x99p\xac\x9a\x80X \xf03\xf5R\x1d.\xa2\x01"
+                     e1eb2089990f3c01c45865ced38e634c            #               "\xe1\xeb \x89\x99\x0f<\x01\xc4Xe\xce\xd3\x8ecL"
+                     e222cbc6961e1a81ff                          #               "\xe2\"\xcb\xc6\x96\x1e\x1a\x81\xff"
+                                                                 #             encoded cbor data item
+                                                                 #               d8 79                                     # tag(121)
+                                                                 #                  9f                                     #   array(*)
+                                                                 #                     1a 000296ac                         #     unsigned(169,644)
+                                                                 #                     1a 060fc3b8                         #     unsigned(101,696,440)
+                                                                 #                     1b 0000019970ac9a80                 #     unsigned(1,758,531,984,000)
+                                                                 #                     58 20                               #     bytes(32)
+                                                                 #                        f033f5521d2ea201e1eb2089990f3c01 #       "\xf03\xf5R\x1d.\xa2\x01\xe1\xeb \x89\x99\x0f<\x01"
+                                                                 #                        c45865ced38e634ce222cbc6961e1a81 #       "\xc4Xe\xce\xd3\x8ecL\xe2\"\xcb\xc6\x96\x1e\x1a\x81"
+                                                                 #                     ff                                  #     break
+         82                                                      #       array(2)
+            58 39                                                #         bytes(57)
+               00670dc6e123e04c2a75fa2a08593388                  #           "\x00g\r\xc6\xe1#\xe0L*u\xfa*\x08Y3\x88"
+               f9441fdb7166f55487498d2e3e0745b7                  #           "\xf9D\x1f\xdbqf\xf5T\x87I\x8d.>\x07E\xb7"
+               e415e1757f4cb58e3cc85d12c1010782                  #           "\xe4\x15\xe1u\x7fL\xb5\x8e<\xc8]\x12\xc1\x01\x07\x82"
+               14546880cae6151abb                                #           "\x14Th\x80\xca\xe6\x15\x1a\xbb"
+            82                                                   #         array(2)
+               1a 05d26050                                       #           unsigned(97,673,296)
+               a3                                                #           map(3)
+                  58 1c                                          #             bytes(28)
+                     919d4c2c9455016289341b1a14dedf69            #               "\x91\x9dL,\x94U\x01b\x894\x1b\x1a\x14\xde\xdfi"
+                     7687af31751170d56a31466e                    #               "v\x87\xaf1u\x11p\xd5j1Fn"
+                  ad                                             #             map(13)
+                     44                                          #               bytes(4)
+                        74444149                                 #                 "tDAI"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     44                                          #               bytes(4)
+                        74455247                                 #                 "tERG"
+                     1b 000000e8d4a51000                         #               unsigned(1,000,000,000,000)
+                     44                                          #               bytes(4)
+                        74494147                                 #                 "tIAG"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     44                                          #               bytes(4)
+                        744d494e                                 #                 "tMIN"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     44                                          #               bytes(4)
+                        74574d54                                 #                 "tWMT"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     45                                          #               bytes(5)
+                        7441474958                               #                 "tAGIX"
+                     1b 000000174876e800                         #               unsigned(100,000,000,000)
+                     45                                          #               bytes(5)
+                        74434f5049                               #                 "tCOPI"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     45                                          #               bytes(5)
+                        74444a4544                               #                 "tDJED"
+                     1a 3318481f                                 #               unsigned(857,229,343)
+                     45                                          #               bytes(5)
+                        7449555344                               #                 "tIUSD"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     45                                          #               bytes(5)
+                        745348454e                               #                 "tSHEN"
+                     1a 3b9aca00                                 #               unsigned(1,000,000,000)
+                     45                                          #               bytes(5)
+                        74534e454b                               #                 "tSNEK"
+                     19 03e8                                     #               unsigned(1,000)
+                     45                                          #               bytes(5)
+                        7455534443                               #                 "tUSDC"
+                     1b 000000174876e800                         #               unsigned(100,000,000,000)
+                     45                                          #               bytes(5)
+                        7455534454                               #                 "tUSDT"
+                     1b 000000174876e800                         #               unsigned(100,000,000,000)
+                  58 1c                                          #             bytes(28)
+                     e1a6483473a5d6108ed2ed7f452a2d5b            #               "\xe1\xa6H4s\xa5\xd6\x10\x8e\xd2\xed\x7fE*-["
+                     3bec5aeabbe333bf5e6b2505                    #               ";\xecZ\xea\xbb\xe33\xbf^k%\x05"
+                  a1                                             #             map(1)
+                     58 20                                       #               bytes(32)
+                        f033f5521d2ea201e1eb2089990f3c01         #                 "\xf03\xf5R\x1d.\xa2\x01\xe1\xeb \x89\x99\x0f<\x01"
+                        c45865ced38e634ce222cbc6961e1a81         #                 "\xc4Xe\xce\xd3\x8ecL\xe2\"\xcb\xc6\x96\x1e\x1a\x81"
+                     01                                          #               unsigned(1)
+                  58 1c                                          #             bytes(28)
+                     fbfe1688e61ff0e52da1ccbaf1b3a601            #               "\xfb\xfe\x16\x88\xe6\x1f\xf0\xe5-\xa1\xcc\xba\xf1\xb3\xa6\x01"
+                     c66b670272ddb5e197ca39bd                    #               "\xc6kg\x02r\xdd\xb5\xe1\x97\xca9\xbd"
+                  a2                                             #             map(2)
+                     58 1f                                       #               bytes(31)
+                        50542d62689b4f6ac9eca21e6038a119         #                 "PT-bh\x9bOj\xc9\xec\xa2\x1e`8\xa1\x19"
+                        2226b26bf444a8bd233ebd174fbb3f           #                 "\"&\xb2k\xf4D\xa8\xbd#>\xbd\x17O\xbb?"
+                     1a 3b9ac9ff                                 #               unsigned(999,999,999)
+                     58 1f                                       #               bytes(31)
+                        59542d62689b4f6ac9eca21e6038a119         #                 "YT-bh\x9bOj\xc9\xec\xa2\x1e`8\xa1\x19"
+                        2226b26bf444a8bd233ebd174fbb3f           #                 "\"&\xb2k\xf4D\xa8\xbd#>\xbd\x17O\xbb?"
+                     1a 3b9ac9ff                                 #               unsigned(999,999,999)
+      02                                                         #     unsigned(2)
+      1a 0017ba1d                                                #     unsigned(1,554,973)
+      03                                                         #     unsigned(3)
+      1a 05799798                                                #     unsigned(91,854,744)
+      05                                                         #     unsigned(5)
+      a1                                                         #     map(1)
+         58 1d                                                   #       bytes(29)
+            f0a2fa8564c279ca144d69bbbd37057f                     #         "\xf0\xa2\xfa\x85d\xc2y\xca\x14Mi\xbb\xbd7\x05\x7f"
+            5d3d42e59555bc3bfb874919f6                           #         "]=B\xe5\x95U\xbc;\xfb\x87I\x19\xf6"
+         00                                                      #       unsigned(0)
+      07                                                         #     unsigned(7)
+      58 20                                                      #     bytes(32)
+         ea2410ab923e5de4941a0ee061ae2ec8                        #       "\xea$\x10\xab\x92>]\xe4\x94\x1a\x0e\xe0a\xae.\xc8"
+         fb1a42aafce7079c2de4b0eea74248b3                        #       "\xfb\x1aB\xaa\xfc\xe7\x07\x9c-\xe4\xb0\xee\xa7BH\xb3"
+      08                                                         #     unsigned(8)
+      1a 05799630                                                #     unsigned(91,854,384)
+      09                                                         #     unsigned(9)
+      a2                                                         #     map(2)
+         58 1c                                                   #       bytes(28)
+            7b595fd9e70b625caeace2e20ac91f29                     #         "{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f)"
+            2e4cc7f510a23fb71916b76b                             #         ".L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+         a1                                                      #       map(1)
+            58 1c                                                #         bytes(28)
+               32c41815d270a4cc8be4bc9d3d171546                  #           "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+               b44d36cb57aa7b8b05618558                          #           "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+            3a 05eee1cd                                          #         negative(-99,541,454)
+         58 1c                                                   #       bytes(28)
+            e1a6483473a5d6108ed2ed7f452a2d5b                     #         "\xe1\xa6H4s\xa5\xd6\x10\x8e\xd2\xed\x7fE*-["
+            3bec5aeabbe333bf5e6b2505                             #         ";\xecZ\xea\xbb\xe33\xbf^k%\x05"
+         a2                                                      #       map(2)
+            58 1c                                                #         bytes(28)
+               edd5e8a4cf2b03d18e1dadefa00943d7                  #           "\xed\xd5\xe8\xa4\xcf+\x03\xd1\x8e\x1d\xad\xef\xa0\tC\xd7"
+               fbf01cb54f0269db00fab2af                          #           "\xfb\xf0\x1c\xb5O\x02i\xdb\x00\xfa\xb2\xaf"
+            01                                                   #         unsigned(1)
+            58 20                                                #         bytes(32)
+               f033f5521d2ea201e1eb2089990f3c01                  #           "\xf03\xf5R\x1d.\xa2\x01\xe1\xeb \x89\x99\x0f<\x01"
+               c45865ced38e634ce222cbc6961e1a81                  #           "\xc4Xe\xce\xd3\x8ecL\xe2\"\xcb\xc6\x96\x1e\x1a\x81"
+            01                                                   #         unsigned(1)
+      0b                                                         #     unsigned(11)
+      58 20                                                      #     bytes(32)
+         b4791e6d83cb31b7fb54d68b87d1b42c                        #       "\xb4y\x1em\x83\xcb1\xb7\xfbT\xd6\x8b\x87\xd1\xb4,"
+         d99c76f061b28025ae0662b4e449af8e                        #       "\xd9\x9cv\xf0a\xb2\x80%\xae\x06b\xb4\xe4I\xaf\x8e"
+      0d                                                         #     unsigned(13)
+      d9 0102                                                    #     tag(258)
+         81                                                      #       array(1)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  568e6d87dbbd75ebd75e4663ed26a0eb               #             "V\x8em\x87\xdb\xbdu\xeb\xd7^Fc\xed&\xa0\xeb"
+                  54334e1692800134fddc2f407de79fa4               #             "T3N\x16\x92\x80\x014\xfd\xdc/@}\xe7\x9f\xa4"
+               01                                                #           unsigned(1)
+      10                                                         #     unsigned(16)
+      82                                                         #     array(2)
+         58 39                                                   #       bytes(57)
+            00670dc6e123e04c2a75fa2a08593388                     #         "\x00g\r\xc6\xe1#\xe0L*u\xfa*\x08Y3\x88"
+            f9441fdb7166f55487498d2e3e0745b7                     #         "\xf9D\x1f\xdbqf\xf5T\x87I\x8d.>\x07E\xb7"
+            e415e1757f4cb58e3cc85d12c1010782                     #         "\xe4\x15\xe1u\x7fL\xb5\x8e<\xc8]\x12\xc1\x01\x07\x82"
+            14546880cae6151abb                                   #         "\x14Th\x80\xca\xe6\x15\x1a\xbb"
+         1b 0000000253ca54d8                                     #       unsigned(9,995,703,512)
+      11                                                         #     unsigned(17)
+      1a 0023972c                                                #     unsigned(2,332,460)
+      12                                                         #     unsigned(18)
+      d9 0102                                                    #     tag(258)
+         8c                                                      #       array(12)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  8a7b8a548cb04398eaa78e4160046f74               #             "\x8a{\x8aT\x8c\xb0C\x98\xea\xa7\x8eA`\x04ot"
+                  9e5ba865168489e751a173c3a99266ea               #             "\x9e[\xa8e\x16\x84\x89\xe7Q\xa1s\xc3\xa9\x92f\xea"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  15c60cb9a9b8783d6310844dbfef1123               #             "\x15\xc6\x0c\xb9\xa9\xb8x=c\x10\x84M\xbf\xef\x11#"
+                  9b33a10e4c30d80f387b5653de80b385               #             "\x9b3\xa1\x0eL0\xd8\x0f8{VS\xde\x80\xb3\x85"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  c2e5a4d2c2b1d5d26a80f2675d53e4a6               #             "\xc2\xe5\xa4\xd2\xc2\xb1\xd5\xd2j\x80\xf2g]S\xe4\xa6"
+                  4058f4e9745868c133090aab9952936a               #             "@X\xf4\xe9tXh\xc13\t\n\xab\x99R\x93j"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  a64d419e6d45e05d7c29fe158bb4528d               #             "\xa6MA\x9emE\xe0]|)\xfe\x15\x8b\xb4R\x8d"
+                  d145172d52d3ea21bc90362eb42f6d23               #             "\xd1E\x17-R\xd3\xea!\xbc\x906.\xb4/m#"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  cb65a0baf837a3c079f3b38133dc6e8c               #             "\xcbe\xa0\xba\xf87\xa3\xc0y\xf3\xb3\x813\xdcn\x8c"
+                  e1e42db2159b03209ed8668d2ae2c198               #             "\xe1\xe4-\xb2\x15\x9b\x03 \x9e\xd8f\x8d*\xe2\xc1\x98"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  ae98a2ad6804b0638cb0589d5390e3fe               #             "\xae\x98\xa2\xadh\x04\xb0c\x8c\xb0X\x9dS\x90\xe3\xfe"
+                  dc515d79d555ac497ee0ec3fdb554824               #             "\xdcQ]y\xd5U\xacI~\xe0\xec?\xdbUH$"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  c4af5ec19e3c78295ceee0d65be77132               #             "\xc4\xaf^\xc1\x9e<x)\\\xee\xe0\xd6[\xe7q2"
+                  c991bd93350642fbadae3342cd708742               #             "\xc9\x91\xbd\x935\x06B\xfb\xad\xae3B\xcdp\x87B"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  4bd11ee91e4b1e8322f094a3dc9b92eb               #             "K\xd1\x1e\xe9\x1eK\x1e\x83\"\xf0\x94\xa3\xdc\x9b\x92\xeb"
+                  9a28036580ef35012b4261234df8f321               #             "\x9a(\x03e\x80\xef5\x01+Ba#M\xf8\xf3!"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  c0ff515afd3dc5b5e1ae0242ce6aa1e1               #             "\xc0\xffQZ\xfd=\xc5\xb5\xe1\xae\x02B\xcej\xa1\xe1"
+                  ac58bcd93e3672d38be7dc31d256bf26               #             "\xacX\xbc\xd9>6r\xd3\x8b\xe7\xdc1\xd2V\xbf&"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  cb0cbaf47214ecc9284e204bb593842c               #             "\xcb\x0c\xba\xf4r\x14\xec\xc9(N K\xb5\x93\x84,"
+                  48e5c820cf8eb8364fdfec288ffdc012               #             "H\xe5\xc8 \xcf\x8e\xb86O\xdf\xec(\x8f\xfd\xc0\x12"
+               00                                                #           unsigned(0)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  180e1df10597ba1692288523ee43d23d               #             "\x18\x0e\x1d\xf1\x05\x97\xba\x16\x92(\x85#\xeeC\xd2="
+                  49729c6f01dfed3725788c042ac849b0               #             "Ir\x9co\x01\xdf\xed7%x\x8c\x04*\xc8I\xb0"
+               02                                                #           unsigned(2)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  fd3406c4a6e51e21178542e0370d37ac               #             "\xfd4\x06\xc4\xa6\xe5\x1e!\x17\x85B\xe07\r7\xac"
+                  d996aab26d744d7afef09c73ca123f68               #             "\xd9\x96\xaa\xb2mtMz\xfe\xf0\x9cs\xca\x12?h"
+               00                                                #           unsigned(0)
+   a2                                                            #   map(2)
+      00                                                         #     unsigned(0)
+      d9 0102                                                    #     tag(258)
+         81                                                      #       array(1)
+            82                                                   #         array(2)
+               58 20                                             #           bytes(32)
+                  082f4e03eabd3addb7422482336e1689               #             "\x08/N\x03\xea\xbd:\xdd\xb7B$\x823n\x16\x89"
+                  aca4bc03a26b9300c808005e792a8536               #             "\xac\xa4\xbc\x03\xa2k\x93\x00\xc8\x08\x00^y*\x856"
+               58 40                                             #           bytes(64)
+                  2bf959bf381be3a74cd087b5adf7d6d0               #             "+\xf9Y\xbf8\x1b\xe3\xa7L\xd0\x87\xb5\xad\xf7\xd6\xd0"
+                  743fdcb6158ad55940a6de96bc28a2e1               #             "t?\xdc\xb6\x15\x8a\xd5Y@\xa6\xde\x96\xbc(\xa2\xe1"
+                  42d76ba459fcbf63794ec0045e25d12b               #             "B\xd7k\xa4Y\xfc\xbfcyN\xc0\x04^%\xd1+"
+                  8651bfa8fd6520f55358e2ff0867da08               #             "\x86Q\xbf\xa8\xfde \xf5SX\xe2\xff\x08g\xda\x08"
+      05                                                         #     unsigned(5)
+      85                                                         #     array(5)
+         84                                                      #       array(4)
+            00                                                   #         unsigned(0)
+            00                                                   #         unsigned(0)
+            d8 7b                                                #         tag(123)
+               9f                                                #           array(*)
+                  05                                             #             unsigned(5)
+                  9f                                             #             array(*)
+                     d8 79                                       #               tag(121)
+                        9f                                       #                 array(*)
+                           00                                    #                   unsigned(0)
+                           d8 7a                                 #                   tag(122)
+                              80                                 #                     array(0)
+                           08                                    #                   unsigned(8)
+                           ff                                    #                   break
+                     ff                                          #               break
+                  ff                                             #             break
+            82                                                   #         array(2)
+               1a 0001e318                                       #           unsigned(123,672)
+               1a 026be8a6                                       #           unsigned(40,626,342)
+         84                                                      #       array(4)
+            00                                                   #         unsigned(0)
+            01                                                   #         unsigned(1)
+            d8 79                                                #         tag(121)
+               9f                                                #           array(*)
+                  d8 7b                                          #             tag(123)
+                     9f                                          #               array(*)
+                        01                                       #                 unsigned(1)
+                        03                                       #                 unsigned(3)
+                        ff                                       #                 break
+                  01                                             #             unsigned(1)
+                  20                                             #             negative(-1)
+                  07                                             #             unsigned(7)
+                  04                                             #             unsigned(4)
+                  02                                             #             unsigned(2)
+                  ff                                             #             break
+            82                                                   #         array(2)
+               1a 0001fe04                                       #           unsigned(130,564)
+               1a 02e82ed6                                       #           unsigned(48,770,774)
+         84                                                      #       array(4)
+            01                                                   #         unsigned(1)
+            00                                                   #         unsigned(0)
+            d8 7b                                                #         tag(123)
+               9f                                                #           array(*)
+                  05                                             #             unsigned(5)
+                  9f                                             #             array(*)
+                     d8 79                                       #               tag(121)
+                        9f                                       #                 array(*)
+                           00                                    #                   unsigned(0)
+                           d8 7a                                 #                   tag(122)
+                              80                                 #                     array(0)
+                           08                                    #                   unsigned(8)
+                           ff                                    #                   break
+                     ff                                          #               break
+                  ff                                             #             break
+            82                                                   #         array(2)
+               1a 001093e2                                       #           unsigned(1,086,434)
+               1a 159bdcea                                       #           unsigned(362,536,170)
+         84                                                      #       array(4)
+            01                                                   #         unsigned(1)
+            01                                                   #         unsigned(1)
+            d8 79                                                #         tag(121)
+               9f                                                #           array(*)
+                  d8 7b                                          #             tag(123)
+                     9f                                          #               array(*)
+                        01                                       #                 unsigned(1)
+                        03                                       #                 unsigned(3)
+                        ff                                       #                 break
+                  01                                             #             unsigned(1)
+                  20                                             #             negative(-1)
+                  07                                             #             unsigned(7)
+                  04                                             #             unsigned(4)
+                  02                                             #             unsigned(2)
+                  ff                                             #             break
+            82                                                   #         array(2)
+               1a 000e8f67                                       #           unsigned(954,215)
+               1a 132a4362                                       #           unsigned(321,536,866)
+         84                                                      #       array(4)
+            03                                                   #         unsigned(3)
+            00                                                   #         unsigned(0)
+            d8 79                                                #         tag(121)
+               9f                                                #           array(*)
+                  09                                             #             unsigned(9)
+                  9f                                             #             array(*)
+                     06                                          #               unsigned(6)
+                     ff                                          #               break
+                  9f                                             #             array(*)
+                     9f                                          #               array(*)
+                        d8 7a                                    #                 tag(122)
+                           80                                    #                   array(0)
+                        d8 7e                                    #                 tag(126)
+                           80                                    #                   array(0)
+                        00                                       #                 unsigned(0)
+                        ff                                       #                 break
+                     9f                                          #               array(*)
+                        d8 79                                    #                 tag(121)
+                           80                                    #                   array(0)
+                        d9 0501                                  #                 tag(1281)
+                           80                                    #                   array(0)
+                        01                                       #                 unsigned(1)
+                        ff                                       #                 break
+                     9f                                          #               array(*)
+                        d8 79                                    #                 tag(121)
+                           80                                    #                   array(0)
+                        d9 0500                                  #                 tag(1280)
+                           80                                    #                   array(0)
+                        0b                                       #                 unsigned(11)
+                        ff                                       #                 break
+                     ff                                          #               break
+                  a1                                             #             map(1)
+                     9f                                          #               array(*)
+                        40                                       #                 bytes(0)
+                                                                 #                   ""
+                        40                                       #                 bytes(0)
+                                                                 #                   ""
+                        ff                                       #                 break
+                     a3                                          #               map(3)
+                        9f                                       #                 array(*)
+                           58 1c                                 #                   bytes(28)
+                              7aa4312097def38936c7b69fb380f9e8   #                     "z\xa41 \x97\xde\xf3\x896\xc7\xb6\x9f\xb3\x80\xf9\xe8"
+                              685dfa17c52c68151781ea03           #                     "h]\xfa\x17\xc5,h\x15\x17\x81\xea\x03"
+                           40                                    #                   bytes(0)
+                                                                 #                     ""
+                           ff                                    #                   break
+                        d8 79                                    #                 tag(121)
+                           9f                                    #                   array(*)
+                              1b 000000ba2b13fa78                #                     unsigned(799,586,646,648)
+                              1b 000000b13f5e063d                #                     unsigned(761,272,337,981)
+                              ff                                 #                     break
+                        9f                                       #                 array(*)
+                           58 1c                                 #                   bytes(28)
+                              919d4c2c9455016289341b1a14dedf69   #                     "\x91\x9dL,\x94U\x01b\x894\x1b\x1a\x14\xde\xdfi"
+                              7687af31751170d56a31466e           #                     "v\x87\xaf1u\x11p\xd5j1Fn"
+                           45                                    #                   bytes(5)
+                              74444a4544                         #                     "tDJED"
+                           ff                                    #                   break
+                        d8 79                                    #                 tag(121)
+                           9f                                    #                   array(*)
+                              1a 0003623e                        #                     unsigned(221,758)
+                              1a 00026013                        #                     unsigned(155,667)
+                              ff                                 #                     break
+                        9f                                       #                 array(*)
+                           58 1c                                 #                   bytes(28)
+                              7b595fd9e70b625caeace2e20ac91f29   #                     "{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f)"
+                              2e4cc7f510a23fb71916b76b           #                     ".L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+                           58 1c                                 #                   bytes(28)
+                              32c41815d270a4cc8be4bc9d3d171546   #                     "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+                              b44d36cb57aa7b8b05618558           #                     "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+                           ff                                    #                   break
+                        d8 79                                    #                 tag(121)
+                           9f                                    #                   array(*)
+                              1b 0000005091126693                #                     unsigned(346,031,285,907)
+                              1b 00000050327f0aa4                #                     unsigned(344,444,570,276)
+                              ff                                 #                     break
+                  a1                                             #             map(1)
+                     9f                                          #               array(*)
+                        58 1c                                    #                 bytes(28)
+                           7b595fd9e70b625caeace2e20ac91f29      #                   "{Y_\xd9\xe7\x0bb\\\xae\xac\xe2\xe2\n\xc9\x1f)"
+                           2e4cc7f510a23fb71916b76b              #                   ".L\xc7\xf5\x10\xa2?\xb7\x19\x16\xb7k"
+                        58 1c                                    #                 bytes(28)
+                           32c41815d270a4cc8be4bc9d3d171546      #                   "2\xc4\x18\x15\xd2p\xa4\xcc\x8b\xe4\xbc\x9d=\x17\x15F"
+                           b44d36cb57aa7b8b05618558              #                   "\xb4M6\xcbW\xaa{\x8b\x05a\x85X"
+                        ff                                       #                 break
+                     19 01f8                                     #               unsigned(504)
+                  ff                                             #             break
+            82                                                   #         array(2)
+               1a 001fdc4d                                       #           unsigned(2,088,013)
+               1a 28a2d049                                       #           unsigned(681,758,793)
+   f5                                                            #   true, simple(21)
+   a2                                                            #   map(2)
+      19 02a2                                                    #     unsigned(674)
+      a1                                                         #     map(1)
+         63                                                      #       text(3)
+            6d7367                                               #         "msg"
+         81                                                      #       array(1)
+            78 26                                                #         text(38)
+               44616e6f676f2046697865642d526174                  #           "Danogo Fixed-Rat"
+               65204c656e64696e673a204372656174                  #           "e Lending: Creat"
+               65204c6f616e                                      #           "e Loan"
+      19 02d1                                                    #     unsigned(721)
+      a2                                                         #     map(2)
+         67                                                      #       text(7)
+            76657273696f6e                                       #         "version"
+         02                                                      #       unsigned(2)
+         78 38                                                   #       text(56)
+            65316136343833343733613564363130                     #         "e1a6483473a5d610"
+            38656432656437663435326132643562                     #         "8ed2ed7f452a2d5b"
+            33626563356165616262653333336266                     #         "3bec5aeabbe333bf"
+            3565366232353035                                     #         "5e6b2505"
+         a1                                                      #       map(1)
+            78 40                                                #         text(64)
+               66303333663535323164326561323031                  #           "f033f5521d2ea201"
+               65316562323038393939306633633031                  #           "e1eb2089990f3c01"
+               63343538363563656433386536333463                  #           "c45865ced38e634c"
+               65323232636263363936316531613831                  #           "e222cbc6961e1a81"
+            a7                                                   #         map(7)
+               64                                                #           text(4)
+                  64656274                                       #             "debt"
+               6d                                                #           text(13)
+                  3130312e363936343420414441                     #             "101.69644 ADA"
+               64                                                #           text(4)
+                  6e616d65                                       #             "name"
+               78 21                                             #           text(33)
+                  426f72726f776572204e465420284669               #             "Borrower NFT (Fi"
+                  7865642052617465204c656e64696e67               #             "xed Rate Lending"
+                  29                                             #             ")"
+               65                                                #           text(5)
+                  696d616765                                     #             "image"
+               78 35                                             #           text(53)
+                  697066733a2f2f516d57707a654a7769               #             "ipfs://QmWpzeJwi"
+                  6f697266465746774476786d45546a65               #             "oirfFWFwDvxmETje"
+                  6d6f327956626e6b31367a7a37345536               #             "mo2yVbnk16zz74U6"
+                  613436477a                                     #             "a46Gz"
+               67                                                #           text(7)
+                  77656273697465                                 #             "website"
+               71                                                #           text(17)
+                  68747470733a2f2f64616e6f676f2e696f             #             "https://danogo.io"
+               68                                                #           text(8)
+                  6475726174696f6e                               #             "duration"
+               67                                                #           text(7)
+                  36302064617973                                 #             "60 days"
+               68                                                #           text(8)
+                  6d61747572697479                               #             "maturity"
+               77                                                #           text(23)
+                  323032352d30392d32322030393a30363a323420555443 #             "2025-09-22 09:06:24 UTC"
+               6b                                                #           text(11)
+                  6465736372697074696f6e                         #             "description"
+               78 3d                                             #           text(61)
+                  416e204e465420726570726573656e74               #             "An NFT represent"
+                  696e6720746865206c6f616e20707269               #             "ing the loan pri"
+                  6e636970616c20616e6420696e746572               #             "ncipal and inter"
+                  6573742062792044616e6f676f                     #             "est by Danogo"

@@ -1,0 +1,21 @@
+{
+  "name": "lucid-cardano-app",
+  "type": "module",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/main.ts",
+    "build": "tsc",
+    "start": "npm run build && node dist/main.js"
+  },
+  "dependencies": {
+    "@lucid-evolution/lucid": ">=0.4.25"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "@lucid-evolution/lucid": ">=0.4.25"
+  }
+}
