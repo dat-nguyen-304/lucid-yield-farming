@@ -23,6 +23,9 @@ import type {
 } from "./apiResponse.js";
 import {encodeData} from './schema.js'
 
+apiResponse.data.referenceInputs = apiResponse.data.referenceInputs
+      .filter(ref => ref.type != "DANOGO_FLOAT_POOL" && ref.type != "DANOGO_STAKING_SCRIPT")
+
 // --- Type definitions for better code clarity and safety ---
 const now = parseInt(
   // The non-null assertions (!) are safe here because we know our static
@@ -151,8 +154,8 @@ const createLoanRedeemer = async (
         a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
     );
 
-  const fixedLoanScriptRef = apiToRefUtxo(
-    apiData.referenceInputs.find((r) => r.type === "FIXED_LOAN_SCRIPT")
+  const fixedProtocolScriptRef = apiToRefUtxo(
+    apiData.referenceInputs.find((r) => r.type === "FIXED_PROTOCOL_SCRIPT")
   );
   const fixedProtocolConfigRef = apiToRefUtxo(
     apiData.referenceInputs.find((r) => r.type === "FIXED_PROTOCOL_CONFIG")
@@ -160,8 +163,8 @@ const createLoanRedeemer = async (
 
   const protocolScriptRefIndex = refInputs.findIndex(
     (ref) =>
-      ref.txHash === fixedLoanScriptRef!.txHash &&
-      ref.outputIndex === fixedLoanScriptRef!.outputIndex
+      ref.txHash === fixedProtocolScriptRef!.txHash &&
+      ref.outputIndex === fixedProtocolScriptRef!.outputIndex
   );
   const protocolConfigRefIndex = refInputs.findIndex(
     (ref) =>
@@ -178,10 +181,10 @@ const createLoanRedeemer = async (
   // The order of outputs is determined by the order they are added in the main function.
   // We replicate that order here to get the correct indices.
   const outputs = [
-    apiData.outputs.poolOutUtxo,
-    apiData.outputs.loanOutUtxo,
-    apiData.outputs.feeOutUtxo,
     apiData.outputs.floatPoolOutUtxo,
+    apiData.outputs.poolOutUtxo,
+    apiData.outputs.feeOutUtxo,
+    apiData.outputs.loanOutUtxo,
   ].filter((o): o is ApiUtxo => o !== null);
 
   const poolOutIndex = outputs.findIndex(
@@ -273,10 +276,10 @@ const createFloatPoolRedeemer = async (
   // The order of outputs is determined by the order they are added in the main function.
   // We replicate that order here to get the correct indices.
   const outputs = [
-    apiData.outputs.poolOutUtxo,
-    apiData.outputs.loanOutUtxo,
-    apiData.outputs.feeOutUtxo,
     apiData.outputs.floatPoolOutUtxo,
+    apiData.outputs.poolOutUtxo,
+    apiData.outputs.feeOutUtxo,
+    apiData.outputs.loanOutUtxo,
   ].filter((o): o is ApiUtxo => o !== null);
 
   const poolOutIndex: number = outputs.findIndex(
@@ -393,6 +396,8 @@ const main = async () => {
       if (!apiOut) continue; // Skip any null outputs
       if (apiOut.coin === "0") {
         apiOut.coin = "2000000"; // Ensure minimum ADA to avoid "output has no value" errors
+        // addr_test1wrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pgemsun9
+        apiOut.address = "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs"
       }
 
       const assets: Assets = apiToAssets(apiOut.multiAssets, apiOut.coin);
@@ -430,6 +435,7 @@ const main = async () => {
     const isOutRef = (x: OutRef | null): x is OutRef =>
       x !== null && x !== undefined;
     const refUtxos = apiResponse.data.referenceInputs
+      // .filter(ref => ref.type != "DANOGO_FLOAT_POOL" && ref.type != "DANOGO_STAKING_SCRIPT")
       .map(apiToRefUtxo) // (OutRef | null)[]
       .filter(isOutRef); // OutRef[]
 
@@ -647,7 +653,7 @@ const transformLoanDatum = (datum: LoanDatum): string => {
   );
 
   const loanOwnerNFTName = datum.loanOwnerNft.split(".")[1];
-  const loanMaturity = now + 60 * 24 * 60 * 60 * 1000; // 60 days in milliseconds
+  const loanMaturity = now + 60 * 360000; // 1 day = 360000
 
   const dataArray: [bigint, bigint, bigint, string] = [
     BigInt(datum.loanProfitFee),
