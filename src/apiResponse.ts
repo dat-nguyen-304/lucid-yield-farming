@@ -2,13 +2,13 @@
 
 export const apiResponse: ApiResponse = {
     "code": 0,
-    "traceId": "b55029ba0c05622cbb1fea4b737f5d5b",
+    "traceId": "61ce0e032f42a082adcd7a5a5121ad6c",
     "message": "success",
     "data": {
         "inputs": {
             "liqwidInUtxo": null,
             "poolInUtxo": {
-                "outRef": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#2",
+                "outRef": "76b61f21c572d3beaeba933cdb01ae044abb158ff3501523dd97dd3c92d5c85c#1",
                 "address": "addr_test1zralu95guc0lpefd58xt4udn5cquv6m8qfedmd0pjl9rn0g8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asu0esez",
                 "coin": "2228270",
                 "multiAssets": [
@@ -17,7 +17,7 @@ export const apiResponse: ApiResponse = {
                         "assets": [
                             {
                                 "name": "32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558",
-                                "value": "994120530"
+                                "value": "894316585"
                             }
                         ]
                     },
@@ -25,7 +25,7 @@ export const apiResponse: ApiResponse = {
                         "policyId": "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd",
                         "assets": [
                             {
-                                "name": "7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a",
+                                "name": "676cd3a21e5cadd9c41fec6b2a5c405ee0c9c275a82c6990ced01bdb",
                                 "value": "1"
                             }
                         ]
@@ -33,9 +33,9 @@ export const apiResponse: ApiResponse = {
                 ]
             },
             "floatPoolInUtxo": {
-                "outRef": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#1",
+                "outRef": "76b61f21c572d3beaeba933cdb01ae044abb158ff3501523dd97dd3c92d5c85c#0",
                 "address": "addr_test1wpa4jh7euu9kyh9w4n3wyzkfru5junx875g2y0ahryttw6clekqft",
-                "coin": "21455265901",
+                "coin": "20181709354",
                 "multiAssets": [
                     {
                         "policyId": "5bc56ab821b1efbce5be150bd97613c577f32167611211ef742c71f0",
@@ -51,7 +51,7 @@ export const apiResponse: ApiResponse = {
                         "assets": [
                             {
                                 "name": "",
-                                "value": "322518612404"
+                                "value": "325544392320"
                             }
                         ]
                     }
@@ -69,7 +69,7 @@ export const apiResponse: ApiResponse = {
                         "assets": [
                             {
                                 "name": "32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558",
-                                "value": "894708477"
+                                "value": "794948086"
                             }
                         ]
                     },
@@ -77,7 +77,7 @@ export const apiResponse: ApiResponse = {
                         "policyId": "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd",
                         "assets": [
                             {
-                                "name": "7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a",
+                                "name": "676cd3a21e5cadd9c41fec6b2a5c405ee0c9c275a82c6990ced01bdb",
                                 "value": "1"
                             }
                         ]
@@ -88,11 +88,11 @@ export const apiResponse: ApiResponse = {
                     "supplyYieldToken": "7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b.32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558",
                     "circulatingPTSupply": "999999999",
                     "circulatingYTSupply": "999999999",
-                    "supplyMaturity": "1758844800000",
+                    "supplyMaturity": "1758931200000",
                     "baseInterestRate": 2000,
                     "gradient": 1800,
                     "maxLoanDuration": "64800000",
-                    "activeLoanCount": 1,
+                    "activeLoanCount": 2,
                     "minBorrowAmount": "100000000",
                     "collaterals": [
                         {
@@ -119,7 +119,7 @@ export const apiResponse: ApiResponse = {
                         "policyId": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505",
                         "assets": [
                             {
-                                "name": "7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a",
+                                "name": "676cd3a21e5cadd9c41fec6b2a5c405ee0c9c275a82c6990ced01bdb",
                                 "value": "1"
                             }
                         ]
@@ -128,7 +128,7 @@ export const apiResponse: ApiResponse = {
                 "datum": {
                     "loanAmount": "101696440",
                     "loanMaturity": null,
-                    "loanOwnerNft": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505.60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd",
+                    "loanOwnerNft": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505.36546cb67e194342b148a14702a1d1333a0b2caa38be287e9b1726cdd7eba85a",
                     "loanProfitFee": "169644"
                 }
             },
@@ -140,7 +140,7 @@ export const apiResponse: ApiResponse = {
             "liqwidOutUtxo": null,
             "floatPoolOutUtxo": {
                 "address": "addr_test1wpa4jh7euu9kyh9w4n3wyzkfru5junx875g2y0ahryttw6clekqft",
-                "coin": "21355265901",
+                "coin": "20081709354",
                 "multiAssets": [
                     {
                         "policyId": "5bc56ab821b1efbce5be150bd97613c577f32167611211ef742c71f0",
@@ -156,26 +156,26 @@ export const apiResponse: ApiResponse = {
                         "assets": [
                             {
                                 "name": "",
-                                "value": "322518612404"
+                                "value": "325544392320"
                             }
                         ]
                     }
                 ],
                 "datum": {
-                    "totalSupply": "362489357947",
-                    "circulatingDToken": "360358111120",
-                    "totalBorrow": "1931950702",
+                    "totalSupply": "364448678465",
+                    "circulatingDToken": "362147179660",
+                    "totalBorrow": "1823037302",
                     "borrowRate": 504,
-                    "interestIndex": "1006696954087",
-                    "interestTime": "1758768290000",
-                    "undistributedFee": "412990",
-                    "dTokenRateNum": "362589356157",
-                    "dTokenRateDen": "360457523173",
+                    "interestIndex": "1006860242474",
+                    "interestTime": "1758869785000",
+                    "undistributedFee": "56050",
+                    "dTokenRateNum": "364548640395",
+                    "dTokenRateDen": "362246548159",
                     "alternativeSupplyTokens": [
                         {
                             "token": "7aa4312097def38936c7b69fb380f9e8685dfa17c52c68151781ea03",
-                            "latestExchangeRateNum": "268222978039",
-                            "latestExchangeRateDen": "255026462635"
+                            "latestExchangeRateNum": "807257095351",
+                            "latestExchangeRateDen": "767183760079"
                         }
                     ]
                 }
@@ -198,13 +198,13 @@ export const apiResponse: ApiResponse = {
                             },
                             {
                                 "collateralToken": "7aa4312097def38936c7b69fb380f9e8685dfa17c52c68151781ea03",
-                                "priceNum": "268222978039",
-                                "priceDen": "255026462635"
+                                "priceNum": "807257095351",
+                                "priceDen": "767183760079"
                             },
                             {
                                 "collateralToken": "7b595fd9e70b625caeace2e20ac91f292e4cc7f510a23fb71916b76b.32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558",
-                                "priceNum": "362489357947",
-                                "priceDen": "360358111120"
+                                "priceNum": "72889735693",
+                                "priceDen": "72429435932"
                             }
                         ]
                     }
@@ -226,7 +226,7 @@ export const apiResponse: ApiResponse = {
                     "assets": [
                         {
                             "name": "32c41815d270a4cc8be4bc9d3d171546b44d36cb57aa7b8b05618558",
-                            "value": "-99412053"
+                            "value": "-99368499"
                         }
                     ],
                     "redeemerType": "FLOAT"
@@ -235,11 +235,11 @@ export const apiResponse: ApiResponse = {
                     "policyId": "e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505",
                     "assets": [
                         {
-                            "name": "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd",
+                            "name": "36546cb67e194342b148a14702a1d1333a0b2caa38be287e9b1726cdd7eba85a",
                             "value": "1"
                         },
                         {
-                            "name": "7ac65983019a9a463e988cafa1b833fc51b127691e19e812f0a8ba2a",
+                            "name": "676cd3a21e5cadd9c41fec6b2a5c405ee0c9c275a82c6990ced01bdb",
                             "value": "1"
                         }
                     ],
@@ -249,32 +249,16 @@ export const apiResponse: ApiResponse = {
         },
         "referenceInputs": [
             {
-                "outRef": "cb65a0baf837a3c079f3b38133dc6e8ce1e42db2159b03209ed8668d2ae2c198#0",
-                "type": "FLOAT_POOL_SCRIPT"
+                "outRef": "4bd11ee91e4b1e8322f094a3dc9b92eb9a28036580ef35012b4261234df8f321#0",
+                "type": "ORACLE_PRICE_SCRIPT"
             },
             {
-                "outRef": "c4af5ec19e3c78295ceee0d65be77132c991bd93350642fbadae3342cd708742#0",
-                "type": "FLOAT_POOL_CONFIG"
-            },
-            {
-                "outRef": "cb0cbaf47214ecc9284e204bb593842c48e5c820cf8eb8364fdfec288ffdc012#0",
-                "type": "ORACLE_CONFIG"
+                "outRef": "c2e5a4d2c2b1d5d26a80f2675d53e4a64058f4e9745868c133090aab9952936a#0",
+                "type": "FIXED_PROTOCOL_SCRIPT"
             },
             {
                 "outRef": "8a7b8a548cb04398eaa78e4160046f749e5ba865168489e751a173c3a99266ea#0",
                 "type": "FIXED_POOL_SCRIPT"
-            },
-            {
-                "outRef": "4f6f0e15b8bf5020f4c5a8e7a35d5126cc2e352aada88313ce63647976671f09#0",
-                "type": "DANOGO_STAKING_SCRIPT"
-            },
-            {
-                "outRef": "c0ff515afd3dc5b5e1ae0242ce6aa1e1ac58bcd93e3672d38be7dc31d256bf26#0",
-                "type": "ORACLE_SOURCE_PATH"
-            },
-            {
-                "outRef": "4bd11ee91e4b1e8322f094a3dc9b92eb9a28036580ef35012b4261234df8f321#0",
-                "type": "ORACLE_PRICE_SCRIPT"
             },
             {
                 "outRef": "ae98a2ad6804b0638cb0589d5390e3fedc515d79d555ac497ee0ec3fdb554824#0",
@@ -285,15 +269,31 @@ export const apiResponse: ApiResponse = {
                 "type": "FIXED_LOAN_SCRIPT"
             },
             {
+                "outRef": "4f6f0e15b8bf5020f4c5a8e7a35d5126cc2e352aada88313ce63647976671f09#0",
+                "type": "DANOGO_STAKING_SCRIPT"
+            },
+            {
+                "outRef": "c0ff515afd3dc5b5e1ae0242ce6aa1e1ac58bcd93e3672d38be7dc31d256bf26#0",
+                "type": "ORACLE_SOURCE_PATH"
+            },
+            {
+                "outRef": "c4af5ec19e3c78295ceee0d65be77132c991bd93350642fbadae3342cd708742#0",
+                "type": "FLOAT_POOL_CONFIG"
+            },
+            {
+                "outRef": "cb0cbaf47214ecc9284e204bb593842c48e5c820cf8eb8364fdfec288ffdc012#0",
+                "type": "ORACLE_CONFIG"
+            },
+            {
                 "outRef": "a64d419e6d45e05d7c29fe158bb4528dd145172d52d3ea21bc90362eb42f6d23#0",
                 "type": "FIXED_PROTOCOL_CONFIG"
             },
             {
-                "outRef": "c2e5a4d2c2b1d5d26a80f2675d53e4a64058f4e9745868c133090aab9952936a#0",
-                "type": "FIXED_PROTOCOL_SCRIPT"
+                "outRef": "cb65a0baf837a3c079f3b38133dc6e8ce1e42db2159b03209ed8668d2ae2c198#0",
+                "type": "FLOAT_POOL_SCRIPT"
             },
             {
-                "outRef": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#1",
+                "outRef": "76b61f21c572d3beaeba933cdb01ae044abb158ff3501523dd97dd3c92d5c85c#0",
                 "type": "DANOGO_FLOAT_POOL"
             },
             {
@@ -301,7 +301,7 @@ export const apiResponse: ApiResponse = {
                 "type": "DJED_ORACLE"
             },
             {
-                "outRef": "d0985299d30094ba34827dd411598699da960adc5719b986405fd336a1104125#0",
+                "outRef": "05a73d47f0b4c15696a5e78605b1eaee5b23893d55de59e65ca785d2e73875d5#0",
                 "type": "DANOGO_STAKING_ORACLE"
             }
         ],
@@ -315,6 +315,7 @@ export const apiResponse: ApiResponse = {
         "smartContractVersion": "V3"
     }
 }
+
 export interface ApiResponse {
   code: number;
   traceId: string;

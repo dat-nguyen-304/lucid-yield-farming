@@ -21,21 +21,17 @@ import type {
   LoanDatum,
   PoolDatum,
 } from "./apiResponse.js";
-import {encodeData} from './schema.js'
+import { encodeData } from "./schema.js";
+import {UTxOTarget, OracleUtxoType, UtxoType} from './enum.js'
 
-apiResponse.data.referenceInputs = apiResponse.data.referenceInputs
-      .filter(ref => ref.type != "DANOGO_FLOAT_POOL" && ref.type != "DANOGO_STAKING_SCRIPT")
-
-// --- Type definitions for better code clarity and safety ---
-const now = parseInt(
-  // The non-null assertions (!) are safe here because we know our static
-  // apiResponse object contains these values.
-  (apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum)
-    .interestTime,
-  10
+apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
+  (ref) => ref.type != "DANOGO_STAKING_SCRIPT"
 );
 
-const oracleOutputByType = new Map<OracleUtxoType, number>();
+// --- Type definitions for better code clarity and safety ---
+const now = parseInt((apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum).interestTime, 10);
+
+const oracleOutputByOutRef = new Map<string, number>();
 
 // IMPORTANT: Replace this with your actual 24-word seed phrase.
 // It's recommended to load this from a secure environment variable.
@@ -147,6 +143,7 @@ const createLoanRedeemer = async (
 
   // --- Get sorted reference input indices ---
   const refInputs = apiData.referenceInputs
+    .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
     .map(apiToRefUtxo)
     .filter((r): r is OutRef => r !== null)
     .sort(
@@ -213,7 +210,7 @@ const createLoanRedeemer = async (
   //   BigInt(feeOutIndex),
   // ];
 
-  const originCbor =  Data.to(
+  const originCbor = Data.to(
     new Constr(0, [
       new Constr(2, [BigInt(poolOutIndex), BigInt(loanOutIndex)]),
       BigInt(poolInIndex),
@@ -223,8 +220,9 @@ const createLoanRedeemer = async (
       BigInt(feeOutIndex),
     ])
   );
-  console.log({fixedRedeemer: transformString(originCbor)})
-  return transformString(originCbor)
+  // console.log({ fixedRedeemer: transformString(originCbor) });
+  // return transformString(originCbor);
+  return originCbor
 };
 
 /**
@@ -239,9 +237,8 @@ const createFloatPoolRedeemer = async (
   collateralUtxo: UTxO, // Kept for consistent signature, though not used here
   apiData: ApiData
 ): Promise<string> => {
-  // Returns CBOR string
-  // --- Get sorted reference input indices ---
   const refInputs = apiData.referenceInputs
+    .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
     .map(apiToRefUtxo)
     .filter((r): r is OutRef => r !== null)
     .sort(
@@ -285,9 +282,12 @@ const createFloatPoolRedeemer = async (
   const poolOutIndex: number = outputs.findIndex(
     (out) => out.address === apiData.outputs.floatPoolOutUtxo?.address
   );
-  oracleOutputByType.set(OracleUtxoType.DANOGO_FLOAT_POOL, poolOutIndex);
   const feeOutIndex: number = outputs.findIndex(
     (out) => out.address === apiData.outputs.withdrawalFeeOutUtxo?.address
+  );
+  oracleOutputByOutRef.set(
+    apiData.inputs.floatPoolInUtxo!.outRef as string,
+    poolOutIndex
   );
 
   if (poolOutIndex === -1)
@@ -297,14 +297,6 @@ const createFloatPoolRedeemer = async (
     feeOutIndex === -1
       ? new Constr(1, []) // Nothing
       : new Constr(0, [BigInt(feeOutIndex)]); // Just feeOutIndex
-
-  // --- Build redeemer ---
-  // Each pool entry: Constr(0, [poolOutIdx, Constr(1, []), marketRefIdx])
-  // const poolEntry = new Constr(0, [
-  //   BigInt(poolOutIndex),
-  //   feeOutMaybe,
-  //   BigInt(marketRefIdx),
-  // ]);
 
   // Final redeemer: Constr(2, [protocolCfgRefIdx, [poolEntry]])
   const redeemer = new Constr(2, [
@@ -389,7 +381,6 @@ const main = async () => {
       { key: "poolOutUtxo", value: apiResponse.data.outputs.poolOutUtxo },
       { key: "feeOutUtxo", value: apiResponse.data.outputs.feeOutUtxo },
       { key: "loanOutUtxo", value: apiResponse.data.outputs.loanOutUtxo },
-      
     ];
 
     for (const { key, value: apiOut } of orderedOutputs) {
@@ -397,25 +388,14 @@ const main = async () => {
       if (apiOut.coin === "0") {
         apiOut.coin = "2000000"; // Ensure minimum ADA to avoid "output has no value" errors
         // addr_test1wrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pgemsun9
-        apiOut.address = "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs"
+        apiOut.address =
+          "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs";
       }
 
       const assets: Assets = apiToAssets(apiOut.multiAssets, apiOut.coin);
-
       if (apiOut.datum) {
         // Transform the API datum to match the on-chain schema before serializing.
         const transformedDatum = transformDatum(key, apiOut.datum);
-
-        // let datumAsPlutusData: string;
-        // if (Array.isArray(transformedDatum)) {
-        //   // If an array is returned, we assume it's for a Constr to control field order.
-        //   // The contract expects a constructor (usually 0) wrapping the fields.
-        //   datumAsPlutusData = Data.to<Data>(new Constr(0, transformedDatum), undefined, { canonical: true });
-        // } else {
-        //   // Otherwise, use the standard fromJson for map-like structures.
-        //   datumAsPlutusData = Data.to(Data.fromJson(transformedDatum));
-        // }
-        // console.log(`Serialized datum for ${key}:`, datumAsPlutusData);
 
         tx = tx.pay.ToAddressWithData(
           apiOut.address,
@@ -435,7 +415,7 @@ const main = async () => {
     const isOutRef = (x: OutRef | null): x is OutRef =>
       x !== null && x !== undefined;
     const refUtxos = apiResponse.data.referenceInputs
-      // .filter(ref => ref.type != "DANOGO_FLOAT_POOL" && ref.type != "DANOGO_STAKING_SCRIPT")
+      .filter(ref => ref.type != "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo) // (OutRef | null)[]
       .filter(isOutRef); // OutRef[]
 
@@ -443,41 +423,23 @@ const main = async () => {
     tx = tx.readFrom(refUtxosOnChain);
 
     // 6. Add Metadata - This is the correct place to attach it.
-    tx = tx.attachMetadata(674, { msg: ["Danogo Fixed-Rate Lending: Create Loan"] });
-    tx = tx.attachMetadata(721, { 
-      version: 2,  
+    tx = tx.attachMetadata(674, {
+      msg: ["Danogo Fixed-Rate Lending: Create Loan"],
+    });
+    tx = tx.attachMetadata(721, {
+      version: 2,
       e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505: {
-          "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": [
-            [
-                "debt",
-                "101.69644 ADA"
-            ],
-            [
-                "name",
-                "Borrower NFT (Fixed Rate Lending)"
-            ],
-            [
-                "image",
-                "ipfs://QmWpzeJwioirfFWFwDvxmETjemo2yVbnk16zz74U6a46Gz"
-            ],
-            [
-                "website",
-                "https://danogo.io"
-            ],
-            [
-                "duration",
-                "60 days"
-            ],
-            [
-                "maturity",
-                "2025-09-25 08:41:33 UTC"
-            ],
-            [
-                "description",
-                "An NFT representing the loan principal and interest by Danogo"
-            ]
-          ]
-        }
+        "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": {
+          debt: "101.69644 ADA",
+          name: "Borrower NFT (Fixed Rate Lending)",
+          image: "ipfs://QmWpzeJwioirfFWFwDvxmETjemo2yVbnk16zz74U6a46Gz",
+          website: "https://danogo.io",
+          duration: "60 days",
+          maturity: "2025-09-25 12:41:34 UTC",
+          description:
+            "An NFT representing the loan principal and interest by Danogo",
+        },
+      },
     });
 
     // 7. Build redeemers now that we have a transaction structure
@@ -488,6 +450,7 @@ const main = async () => {
       collateralUtxo,
       apiResponse.data as ApiData
     );
+    console.log({ createLoanRedeemerData });
     const floatPoolRedeemerData: string = await createFloatPoolRedeemer(
       lucid,
       collateralUtxo,
@@ -512,7 +475,7 @@ const main = async () => {
     tx = tx.collectFrom(fixedPoolInUtxo, createLoanRedeemerData);
     tx = tx.collectFrom(floatPoolInUtxo, floatPoolRedeemerData);
     tx = tx.collectFrom([collateralUtxo]);
-    
+
     // Add withdrawal with a placeholder, as its redeemer will be updated later.
     const withdrawal = apiResponse.data.withdrawal;
     if (withdrawal) {
@@ -531,45 +494,6 @@ const main = async () => {
         BigInt(withdrawal.coin),
         oracleRedeemerData
       );
-    }
-
-    // 8. Attach Minting Policies
-    // Find the scripts from reference inputs and attach them as minting policies.
-    // This is crucial for the node to validate the minting operations.
-    const mintingScripts = new Map<
-      string,
-      { type: "PlutusV3"; script: string }
-    >();
-    for (const mint of apiResponse.data.mint.multiAssets) {
-      if (mintingScripts.has(mint.policyId)) continue;
-
-      const scriptType =
-        mint.redeemerType === "FIXED"
-          ? "FIXED_LOAN_SCRIPT"
-          : "FLOAT_POOL_SCRIPT";
-      const refInput = apiResponse.data.referenceInputs.find(
-        (r) => r.type === scriptType
-      );
-
-      if (refInput?.outRef) {
-        // In the new API, we get the script from the reference input UTxO.
-        const [txHash, outputIndex] = refInput.outRef.split("#");
-        const refUtxo = (
-          await lucid.utxosByOutRef([
-            { txHash, outputIndex: parseInt(outputIndex) },
-          ])
-        )[0];
-        if (!refUtxo?.scriptRef) {
-          throw new Error(
-            `Could not find script for policy ${mint.policyId} at ${refInput.outRef}`
-          );
-        }
-        const script = {
-          type: "PlutusV3", // Based on your API response, these are V3 scripts
-          script: refUtxo.scriptRef.script,
-        } as Script;
-        // tx = tx.attach.MintingPolicy(script);
-      }
     }
 
     // 8. Add Minting with the correct redeemer
@@ -593,18 +517,24 @@ const main = async () => {
 
     // Log the transaction CBOR before final completion for debugging purposes.
     // This creates a temporary transaction without running coin selection to get a preview.
+    const presetUtxos = (await lucid.wallet().getUtxos()).filter(
+      (utxo) => utxo.outputIndex === 1 && utxo.txHash === "b650559db26322a1c3a724a3d6c1791c92fd7617902d9f1dd21626e9fca3cb06"
+    );
+    // console.log({presetUtxos})
     const tempBuiltTx = await tx.complete({
-      // setCollateral: BigInt(5000000),
-      coinSelection: false,
+      // setCollateral: 0n,
+      // coinSelection: false,
       localUPLCEval: false, // No need to evaluate scripts for this preview
+      // presetWalletInputs: presetUtxos
     });
     const txCbor = tempBuiltTx.toCBOR();
     console.log("Transaction CBOR (pre-balancing):", txCbor);
+    
 
     // 9. Complete, sign, and submit the transaction.
     // By enabling coin selection (default), Lucid will automatically add inputs from your wallet
     // to cover the transaction fee and send any change back to your address.
-    const builtTx = await tx.complete({ setCollateral: BigInt(5000000) });
+    const builtTx = await tx.complete({ setCollateral: 0n, coinSelection: false, presetWalletInputs: presetUtxos });
     // Sign with the wallet that was selected from the seed phrase.
     const signedTx = await builtTx.sign.withWallet().complete();
 
@@ -705,24 +635,22 @@ const transformPoolDatum = (datum: PoolDatum): string => {
   );
 
   const supplyTokens: [[string, string], [string, string]] = [
-    tokenIdToTuple(datum.supplyYieldToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string],
-    tokenIdToTuple(datum.supplyToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string],
+    tokenIdToTuple(datum.supplyYieldToken).map((v) =>
+      v instanceof Uint8Array ? toHex(v) : v
+    ) as [string, string],
+    tokenIdToTuple(datum.supplyToken).map((v) =>
+      v instanceof Uint8Array ? toHex(v) : v
+    ) as [string, string],
   ];
 
   const collateralsMap = new Map(
     datum.collaterals.map((c) => [
-      tokenIdToTuple(c.collateralToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string],
+      tokenIdToTuple(c.collateralToken).map((v) =>
+        v instanceof Uint8Array ? toHex(v) : v
+      ) as [string, string],
       BigInt(c.liquidationThreshold),
     ])
   );
-
-  // 2. Serialize the map to a canonical CBOR string.
-  const collateralsMapCbor = encodeData(collateralsMap, Data.Map(TokenIdSchema, Data.Integer()), { canonical: true });
-  console.log({collateralsMapCbor})
-  // 3. Deserialize it back into a raw PlutusData object.
-  // This preserves the canonical CBOR structure for later serialization.
-  const collateralsMapPlutusData = Data.from(collateralsMapCbor);
-
 
   const dataArray: [
     [[string, string], [string, string]],
@@ -741,17 +669,16 @@ const transformPoolDatum = (datum: PoolDatum): string => {
     BigInt(datum.circulatingPTSupply),
     BigInt(datum.circulatingYTSupply),
     BigInt(datum.supplyMaturity),
-    collateralsMapPlutusData as Map<[string, string], bigint>,
+    collateralsMap,
     BigInt(datum.baseInterestRate),
     BigInt(datum.gradient),
     BigInt(datum.maxLoanDuration),
-    BigInt(datum.activeLoanCount), // The API value seems to be off by one
+    BigInt(datum.activeLoanCount),
     false,
     BigInt(datum.minBorrowAmount),
   ];
-
-  console.log({poolDatum: transformString(encodeData(dataArray, PoolDatumSchema))})
-  return transformString(encodeData(dataArray, PoolDatumSchema));
+  // return transformString(encodeData(dataArray, PoolDatumSchema));
+  return encodeData(dataArray, PoolDatumSchema);
 };
 
 /**
@@ -781,40 +708,16 @@ const transformFloatPoolDatum = (datum: FloatPoolDatum): string => {
     alternativeSupplyTokensRate,
   ];
 
-  // The float pool datum is a simple list of fields, not a constructor.
-  // So we serialize it directly without a top-level schema.
-  // The `alternativeSupplyTokensRate` already contains Constr objects,
-  // so Data.to will handle them correctly.
-  console.log({floatDatum: Data.to(new Constr(0,dataArray))})
-  return Data.to(new Constr(0,dataArray));
+  console.log({ floatDatum: Data.to(new Constr(0, dataArray)) });
+  return Data.to(new Constr(0, dataArray));
 };
 
-export enum UTxOTarget {
-  Ref = 0,
-  Out = 1,
-}
 
-export enum OracleUtxoType {
-  UNDEFINED,
-  ORCFAX_FSP,
-  ORCFAX_FS,
-  DANOGO_FLOAT_POOL,
-  INDIGO_ORACLE,
-  DANOGO_STAKING_ORACLE,
-  FIXED_PROTOCOL_CONFIG,
-  FIXED_PROTOCOL_SCRIPT,
-  FIXED_POOL_SCRIPT,
-  FIXED_LOAN_SCRIPT,
-  FLOAT_PROTOCOL_CONFIG,
-  FLOAT_PROTOCOL_SCRIPT,
-  FLOAT_POOL_SCRIPT,
-  FLOAT_POOL_CONFIG,
-  FLOAT_LOAN_SCRIPT,
-  DANOGO_STAKING_SCRIPT,
-  ORACLE_PRICE_SCRIPT,
-  ORACLE_CONFIG,
-  ORACLE_SOURCE_PATH,
-}
+
+// Oracle UTxO types set
+const utxoTypes = new Set<string>(
+  Object.values(UtxoType).filter((v) => typeof v === "string") as string[]
+);
 
 // Oracle UTxO types set
 const oracleUTxOTypes = new Set<string>(
@@ -832,6 +735,7 @@ const createOracleRedeemer = async (
 ): Promise<string> => {
   // --- Collect & sort reference inputs ---
   const refInputs = apiData.referenceInputs
+    .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
     .map(apiToRefUtxo)
     .filter((r): r is OutRef => r !== null)
     .sort(
@@ -883,31 +787,60 @@ const createOracleRedeemer = async (
   // Example fallback: if not present, we leave it empty (or you can adapt to build from other API fields).
   let oracleIndexes: [Constr<[]>, Constr<[]>, bigint][] = [];
 
-  oracleOutputByType.forEach((outputIndex, oracleType) => {
-    oracleIndexes.push(makeOracleIndex(1, oracleType, outputIndex));
-  });
+  const referenceInputByType = new Map<string, Set<string>>();
   apiData.referenceInputs.forEach((refInput) => {
-    if (
-      refInput.type == "ORACLE_CONFIG" ||
-      refInput.type == "ORACLE_SOURCE_PATH" ||
-      refInput.type == "ORACLE_PRICE_SCRIPT"
-    ) {
-      const outRef = refInput.outRef;
-      const txHash = outRef.split("#")[0];
-      const outputIndex = parseInt(outRef.split("#")[1]);
-      const index: number = refInputs.findIndex(
-        (ref) => ref.txHash === txHash && ref.outputIndex === outputIndex
+    if (!referenceInputByType.has(refInput.type)) {
+      referenceInputByType.set(refInput.type, new Set());
+    }
+    referenceInputByType.get(refInput.type)?.add(refInput.outRef);
+  });
+
+  const oracleRefByType = new Map<string, Set<string>>();
+  const oracleOutByType = new Map<string, number>();
+  const requiredRefTypes = new Set(oracleUTxOTypes);
+  requiredRefTypes.add("ORACLE_CONFIG");
+  requiredRefTypes.add("ORACLE_SOURCE_PATH");
+  requiredRefTypes.add("ORACLE_PRICE_SCRIPT");
+  referenceInputByType.forEach((outRefs, type) => {
+    outRefs.forEach((outRef) => {
+      const outIdx = oracleOutputByOutRef.get(outRef);
+      if (outIdx !== undefined) oracleOutByType.set(type, outIdx);
+      else if (requiredRefTypes.has(type)) {
+        const outRefs = oracleRefByType.get(type) ?? new Set();
+        outRefs.add(outRef);
+        oracleRefByType.set(type, outRefs);
+      }
+    });
+  });
+
+  oracleOutByType.forEach((outputIndex, oracleType) => {
+    if (oracleUTxOTypes.has(oracleType)) {
+      oracleIndexes.push(
+        makeOracleIndex(
+          1,
+          OracleUtxoType[oracleType as keyof typeof OracleUtxoType],
+          outputIndex
+        )
       );
-      if (index !== -1 && oracleUTxOTypes.has(refInput.type)) {
+    }
+  });
+
+  oracleRefByType.forEach((outRefs, oracleType) => {
+    outRefs.forEach((outRef) => {
+      const index = refInputs.findIndex(
+        (ref) => ref.txHash + "#" +ref.outputIndex.toString() === outRef
+      );
+      // Check if the index was found and if the oracleType is a valid enum key
+      if (index !== -1 && oracleUTxOTypes.has(oracleType)) {
         oracleIndexes.push(
           makeOracleIndex(
             0,
-            OracleUtxoType[refInput.type as keyof typeof OracleUtxoType],
+            OracleUtxoType[oracleType as keyof typeof OracleUtxoType],
             index
           )
         );
       }
-    }
+    });
   });
 
   // Prices: Map<TokenIdTuple, Map<TokenIdTuple, RationalConstr>>
@@ -915,13 +848,17 @@ const createOracleRedeemer = async (
   const priceGroups = (apiData.withdrawal?.withdrawalRedeemer?.prices ??
     []) as any[];
   for (const pg of priceGroups) {
-    const borrowKey = tokenIdToTuple(pg.borrowToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string];
+    const borrowKey = tokenIdToTuple(pg.borrowToken).map((v) =>
+      v instanceof Uint8Array ? toHex(v) : v
+    ) as [string, string];
     const inner = new Map<any, any>();
     for (const op of pg.oraclePrices ?? []) {
       // encode Rational as Constr(0, [numerator, denominator]) to match your example
       const rationalTuple = [BigInt(op.priceNum), BigInt(op.priceDen)];
       inner.set(
-        tokenIdToTuple(op.collateralToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string],
+        tokenIdToTuple(op.collateralToken).map((v) =>
+          v instanceof Uint8Array ? toHex(v) : v
+        ) as [string, string],
         rationalTuple
       );
     }
@@ -933,37 +870,48 @@ const createOracleRedeemer = async (
   const brs = (apiData.withdrawal?.withdrawalRedeemer?.borrowRates ??
     []) as any[];
   for (const br of brs) {
-    borrowRatesMap.set(tokenIdToTuple(br.yieldToken).map(v => v instanceof Uint8Array ? toHex(v) : v) as [string, string], BigInt(br.borrowRate));
+    borrowRatesMap.set(
+      tokenIdToTuple(br.yieldToken).map((v) =>
+        v instanceof Uint8Array ? toHex(v) : v
+      ) as [string, string],
+      BigInt(br.borrowRate)
+    );
   }
 
   const TokenIdSchema = Data.Tuple([Data.Bytes(), Data.Bytes()]);
 
-// Schema for a Rational Number: a Constr with [numerator, denominator]
-const RationalSchema = Data.Tuple([Data.Integer(), Data.Integer()], {
-  hasConstr: true, // Serializes as Constr(0, [num, den])
-});
+  // Schema for a Rational Number: a Constr with [numerator, denominator]
+  const RationalSchema = Data.Tuple([Data.Integer(), Data.Integer()], {
+    hasConstr: true, // Serializes as Constr(0, [num, den])
+  });
 
-// The complete schema for the Oracle Redeemer data structure
-const OracleRedeemerSchema = Data.Tuple(
-  [
-    // Field 0: oracleSourceIndex
-    Data.Integer(),
-    // Field 1: oraclePathIndexes
-    Data.Array(Data.Integer()),
-    // Field 2: oracleIndexes (an array of complex tuples)
-    Data.Array(
-      Data.Tuple([Data.Any(), Data.Any(), Data.Integer()]) // Using Data.Any() for the Constrs
-    ),
-    // Field 3: pricesMap (a map where the value is another map)
-    Data.Map(TokenIdSchema, Data.Map(TokenIdSchema, RationalSchema)),
-    // Field 4: borrowRatesMap
-    Data.Map(TokenIdSchema, Data.Integer()),
-  ],
-  { hasConstr: true } // The entire redeemer is a Constr(0, [fields])
-);
+  // The complete schema for the Oracle Redeemer data structure
+  const OracleRedeemerSchema = Data.Tuple(
+    [
+      // Field 0: oracleSourceIndex
+      Data.Integer(),
+      // Field 1: oraclePathIndexes
+      Data.Array(Data.Integer()),
+      // Field 2: oracleIndexes (an array of complex tuples)
+      Data.Array(
+        Data.Tuple([Data.Any(), Data.Any(), Data.Integer()]) // Using Data.Any() for the Constrs
+      ),
+      // Field 3: pricesMap (a map where the value is another map)
+      Data.Map(TokenIdSchema, Data.Map(TokenIdSchema, RationalSchema, {minItems: 3, maxItems: 3}), {minItems: 1, maxItems: 1}),
+      // Field 4: borrowRatesMap
+      Data.Map(TokenIdSchema, Data.Integer(), {minItems: 1, maxItems: 1}),
+    ],
+    { hasConstr: true } // The entire redeemer is a Constr(0, [fields])
+  );
 
   // Create a plain array that matches the OracleRedeemerSchema structure
-  const redeemerData: [bigint, bigint[], [Constr<[]>, Constr<[]>, bigint][], Map<any, any>, Map<any, any>] = [
+  const redeemerData: [
+    bigint,
+    bigint[],
+    [Constr<[]>, Constr<[]>, bigint][],
+    Map<any, any>,
+    Map<any, any>
+  ] = [
     BigInt(sourceRefIndex), // oracleSourceIndexx
     pathRefIndexes.map((i) => BigInt(i)), // oraclePathIndexes
     oracleIndexes, // oracleIndexes array of [Constr, Constr, bigint]
@@ -972,28 +920,56 @@ const OracleRedeemerSchema = Data.Tuple(
   ];
 
   // Serialize to hex CBOR string
-  return encodeData(
-    redeemerData,
-    OracleRedeemerSchema
-  );
+  const encodedData = encodeData(redeemerData, OracleRedeemerSchema);
+  // console.log({ transformOracleRedeemer: transformOracleRedeemer(encodedData) });
+  // return transformOracleRedeemer(encodedData);
+  return encodedData
 };
 
-function transformString(originalString: string): string {
-  let result = originalString;
+/**
+ * Applies specific CBOR transformations to the oracle redeemer.
+ * - Replaces the first 'bf9f' with 'a19f'.
+ * - Replaces the second 'bf9f' with 'a39f'.
+ * - Removes 'ff' before the last 'bf9f' and replaces that 'bf9f' with 'a19f'.
+ * @param cborString The original CBOR string.
+ * @returns The transformed CBOR string.
+ */
+// const transformOracleRedeemer = (cborString: string): string => {
+//   const occurrences: number[] = [];
+//   let index = cborString.indexOf("bf9f");
+//   while (index !== -1) {
+//     occurrences.push(index);
+//     index = cborString.indexOf("bf9f", index + 1);
+//   }
 
-  const bfIndex = originalString.indexOf("bf");
-  if (bfIndex === -1) return result; // 'bf' not found
+//   if (occurrences.length < 3) {
+//     console.warn(`Expected at least 3 occurrences of "bf9f", but found ${occurrences.length}. Returning original string.`);
+//     return cborString;
+//   }
 
-  const firstFfIndex = originalString.indexOf("ff", bfIndex + 2);
-  if (firstFfIndex === -1) return result; // First 'ff' not found
+//   let result = cborString.substring(0, occurrences[0]) + "a19f" + cborString.substring(occurrences[0] + 4);
+//   result = result.substring(0, occurrences[1]) + "a39f" + result.substring(occurrences[1] + 4);
+//   const lastOccurence = occurrences[occurrences.length - 1];
+//   result = result.substring(0, lastOccurence - 2) + "a19f" + result.substring(lastOccurence + 4);
+//   return result;
+// };
 
-  const secondFfIndex = originalString.indexOf("ff", firstFfIndex + 2);
-  if (secondFfIndex === -1) return result; // Second 'ff' not found
+// function transformString(originalString: string): string {
+//   let result = originalString;
 
-  const part1 = originalString.substring(0, bfIndex);
-  const part2_middle = originalString.substring(bfIndex + 2, secondFfIndex);
-  const part3_end = originalString.substring(secondFfIndex + 2);
+//   const bfIndex = originalString.indexOf("bf");
+//   if (bfIndex === -1) return result; // 'bf' not found
 
-  result = part1 + "a1" + part2_middle + part3_end;
-  return result;
-}
+//   const firstFfIndex = originalString.indexOf("ff", bfIndex + 2);
+//   if (firstFfIndex === -1) return result; // First 'ff' not found
+
+//   const secondFfIndex = originalString.indexOf("ff", firstFfIndex + 2);
+//   if (secondFfIndex === -1) return result; // Second 'ff' not found
+
+//   const part1 = originalString.substring(0, bfIndex);
+//   const part2_middle = originalString.substring(bfIndex + 2, secondFfIndex);
+//   const part3_end = originalString.substring(secondFfIndex + 2);
+
+//   result = part1 + "a1" + part2_middle + part3_end;
+//   return result;
+// }
