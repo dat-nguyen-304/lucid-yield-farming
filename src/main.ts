@@ -1,5 +1,4 @@
 import {
-  Blockfrost,
   CML as C,
   toHex,
   fromHex,
@@ -9,11 +8,10 @@ import {
   LucidEvolution,
   credentialToRewardAddress,
   TxBuilder,
-  mintingPolicyToId,
   Kupmios,
 } from "@lucid-evolution/lucid";
 import { apiResponse } from "./apiResponse.js";
-import type { Assets, UTxO, OutRef, Script } from "@lucid-evolution/lucid";
+import type { Assets, UTxO, OutRef } from "@lucid-evolution/lucid";
 import type {
   ApiUtxo,
   ApiMultiAsset,
@@ -24,15 +22,30 @@ import type {
   PoolDatum,
 } from "./apiResponse.js";
 import { encodeData } from "./schema.js";
-import { UTxOTarget, OracleUtxoType, UtxoType } from "./enum.js";
+import { OracleUtxoType } from "./enum.js";
 
-// Filter out problematic reference inputs
+// ignore if don't borrow from danogo staking (borrow from float only)
+if (apiResponse.data.outputs.stakingContractOutUtxo === null) {
+  apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
+    (ref) => ref.type != "DANOGO_STAKING_SCRIPT"
+  );
+}
+
+const referenceInputByType = new Map<string, Set<string>>();
+apiResponse.data.referenceInputs.forEach((refInput) => {
+  if (!referenceInputByType.has(refInput.type)) {
+    referenceInputByType.set(refInput.type, new Set());
+  }
+  referenceInputByType.get(refInput.type)?.add(refInput.outRef);
+});
+
+// remove floatPoolInUtxo from reference input
 apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
-  (ref) => ref.type != "DANOGO_STAKING_SCRIPT"
+  (ref) => ref.type != "DANOGO_FLOAT_POOL"
 );
 
-// Type definitions for better code clarity and safety
-const now = parseInt(
+// Get interestTime to set valid start and loan maturity
+const interestTime = parseInt(
   (apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum)
     .interestTime,
   10
@@ -42,37 +55,6 @@ const oracleOutputByOutRef = new Map<string, number>();
 // IMPORTANT: Replace this with your actual 24-word seed phrase
 const seedPhrase =
   "fork target sense patient museum unusual rough hair brief misery main duty below garbage pizza oval truth invite vessel father flame repair ketchup field";
-
-// Utility to validate hex strings
-const isValidHex = (str: string): boolean => {
-  return /^[0-9a-fA-F]*$/.test(str);
-};
-
-// Add CBOR validation function
-const validateCbor = (cborHex: string, description: string): boolean => {
-  try {
-    // Check if valid hex
-    if (!isValidHex(cborHex)) {
-      console.error(`Invalid hex in ${description}:`, cborHex);
-      return false;
-    }
-
-    // Check if even length (valid hex pairs)
-    if (cborHex.length % 2 !== 0) {
-      console.error(`Odd length hex string in ${description}:`, cborHex);
-      return false;
-    }
-
-    // Try to parse with Lucid's Data.from()
-    Data.from(cborHex);
-    console.log(`✓ Valid CBOR for ${description}`);
-    return true;
-  } catch (error) {
-    console.error(`Invalid CBOR in ${description}:`, error);
-    console.error(`CBOR hex:`, cborHex);
-    return false;
-  }
-};
 
 // Helper functions to parse API response
 const apiToAssets = (
@@ -130,23 +112,9 @@ const tokenIdToTuple = (tokenId: string): [string, Uint8Array] => {
       const policy = parts[0] ?? "";
       const assetName = parts[1] ?? "";
 
-      // Validate policy ID
-      if (policy && !isValidHex(policy)) {
-        throw new Error(`Invalid hex policy ID: ${policy}`);
-      }
+      if (assetName.length > 0) return [policy, fromHex(assetName)];
 
-      if (assetName.length > 0) {
-        if (!isValidHex(assetName)) {
-          throw new Error(`Invalid hex asset name: ${assetName}`);
-        }
-        return [policy, fromHex(assetName)];
-      }
       return [policy, emptyBytes];
-    }
-
-    // Single part - treat as policy ID
-    if (tokenId && !isValidHex(tokenId)) {
-      throw new Error(`Invalid hex token ID: ${tokenId}`);
     }
     return [tokenId, emptyBytes];
   } catch (error) {
@@ -157,15 +125,14 @@ const tokenIdToTuple = (tokenId: string): [string, Uint8Array] => {
 
 // Create loan redeemer with validation
 const createLoanRedeemer = async (
-  lucid: LucidEvolution,
+  apiData: ApiData,
   collateralUtxo: UTxO,
-  apiData: ApiData
 ): Promise<string> => {
   try {
     const allInputs = [
+      collateralUtxo,
       apiToUtxo(apiData.inputs.poolInUtxo),
       apiToUtxo(apiData.inputs.floatPoolInUtxo),
-      collateralUtxo,
     ].sort(
       (a, b) =>
         a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
@@ -185,7 +152,6 @@ const createLoanRedeemer = async (
     }
 
     const refInputs = apiData.referenceInputs
-      .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
       .sort(
@@ -253,10 +219,6 @@ const createLoanRedeemer = async (
       ])
     );
 
-    if (!validateCbor(redeemerCbor, "loan redeemer")) {
-      throw new Error("Generated invalid CBOR for loan redeemer");
-    }
-
     return redeemerCbor;
   } catch (error) {
     console.error("Error creating loan redeemer:", error);
@@ -265,14 +227,9 @@ const createLoanRedeemer = async (
 };
 
 // Create float pool redeemer with validation
-const createFloatPoolRedeemer = async (
-  lucid: LucidEvolution,
-  collateralUtxo: UTxO,
-  apiData: ApiData
-): Promise<string> => {
+const createFloatPoolRedeemer = async (apiData: ApiData): Promise<string> => {
   try {
     const refInputs = apiData.referenceInputs
-      .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
       .sort(
@@ -351,10 +308,6 @@ const createFloatPoolRedeemer = async (
       ])
     );
 
-    if (!validateCbor(redeemerCbor, "float pool redeemer")) {
-      throw new Error("Generated invalid CBOR for float pool redeemer");
-    }
-
     return redeemerCbor;
   } catch (error) {
     console.error("Error creating float pool redeemer:", error);
@@ -393,11 +346,8 @@ const transformLoanDatum = (datum: LoanDatum): string => {
   }
 
   const loanOwnerNFTName = nftParts[1];
-  if (!isValidHex(loanOwnerNFTName)) {
-    throw new Error(`Invalid hex in NFT name: ${loanOwnerNFTName}`);
-  }
 
-  const loanMaturity = now + 60 * 360000; // 1 day = 360000
+  const loanMaturity = interestTime + 60 * 360000; // 1 day = 360000
 
   const dataArray: [bigint, bigint, bigint, string] = [
     BigInt(datum.loanProfitFee),
@@ -407,10 +357,6 @@ const transformLoanDatum = (datum: LoanDatum): string => {
   ];
 
   const encodedData = encodeData(dataArray, LoanDatumSchema);
-
-  if (!validateCbor(encodedData, "loan datum")) {
-    throw new Error("Generated invalid CBOR for loan datum");
-  }
 
   return encodedData;
 };
@@ -481,10 +427,6 @@ const transformPoolDatum = (datum: PoolDatum): string => {
 
   const encodedData = encodeData(dataArray, PoolDatumSchema);
 
-  if (!validateCbor(encodedData, "pool datum")) {
-    throw new Error("Generated invalid CBOR for pool datum");
-  }
-
   return transformString(encodedData);
 };
 
@@ -510,22 +452,13 @@ const transformFloatPoolDatum = (datum: FloatPoolDatum): string => {
 
   const encodedData = Data.to(new Constr(0, dataArray));
 
-  if (!validateCbor(encodedData, "float pool datum")) {
-    throw new Error("Generated invalid CBOR for float pool datum");
-  }
-
   return encodedData;
 };
 
 // Oracle redeemer creation with validation
-const createOracleRedeemer = async (
-  lucid: LucidEvolution,
-  collateralUtxo: UTxO,
-  apiData: ApiData
-): Promise<string> => {
+const createOracleRedeemer = async (apiData: ApiData): Promise<string> => {
   try {
     const refInputs = apiData.referenceInputs
-      .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
       .sort(
@@ -534,10 +467,10 @@ const createOracleRedeemer = async (
       );
 
     const oracleSourceRef = apiToRefUtxo(
-      apiData.referenceInputs.find((r) => r.type === "ORACLE_CONFIG")
+      apiData.referenceInputs.find((r) => r.type === "ORACLE_CONFIG") // ORACLE_SOURCE in kotlin
     );
     const oraclePathRefs = apiData.referenceInputs
-      .filter((r) => r.type === "ORACLE_SOURCE_PATH")
+      .filter((r) => r.type === "ORACLE_SOURCE_PATH") // ORACLE_PATH in kotlin
       .map(apiToRefUtxo);
 
     if (!oracleSourceRef) {
@@ -573,14 +506,6 @@ const createOracleRedeemer = async (
 
     let oracleIndexes: [Constr<[]>, Constr<[]>, bigint][] = [];
 
-    const referenceInputByType = new Map<string, Set<string>>();
-    apiData.referenceInputs.forEach((refInput) => {
-      if (!referenceInputByType.has(refInput.type)) {
-        referenceInputByType.set(refInput.type, new Set());
-      }
-      referenceInputByType.get(refInput.type)?.add(refInput.outRef);
-    });
-
     const oracleUTxOTypes = new Set<string>(
       Object.values(OracleUtxoType).filter(
         (v) => typeof v === "string"
@@ -607,11 +532,12 @@ const createOracleRedeemer = async (
       });
     });
 
+    // add oracle indexes for output (for floatPoolOut)
     oracleOutByType.forEach((outputIndex, oracleType) => {
       if (oracleUTxOTypes.has(oracleType)) {
         oracleIndexes.push(
           makeOracleIndex(
-            1,
+            1, // UtxoTarget index for output = 1
             OracleUtxoType[oracleType as keyof typeof OracleUtxoType],
             outputIndex
           )
@@ -619,6 +545,7 @@ const createOracleRedeemer = async (
       }
     });
 
+    // add oracle indexes for reference inputs
     oracleRefByType.forEach((outRefs, oracleType) => {
       outRefs.forEach((outRef) => {
         const index = refInputs.findIndex(
@@ -627,7 +554,7 @@ const createOracleRedeemer = async (
         if (index !== -1 && oracleUTxOTypes.has(oracleType)) {
           oracleIndexes.push(
             makeOracleIndex(
-              0,
+              0, // UtxoTarget index for reference input = 0
               OracleUtxoType[oracleType as keyof typeof OracleUtxoType],
               index
             )
@@ -636,6 +563,7 @@ const createOracleRedeemer = async (
       });
     });
 
+    // TODO: Update type instead of using "any"
     const pricesMap = new Map<any, any>();
     const priceGroups = (apiData.withdrawal?.withdrawalRedeemer?.prices ??
       []) as any[];
@@ -702,11 +630,7 @@ const createOracleRedeemer = async (
     ];
 
     const encodedData = encodeData(redeemerData, OracleRedeemerSchema);
-
-    if (!validateCbor(encodedData, "oracle redeemer")) {
-      throw new Error("Generated invalid CBOR for oracle redeemer");
-    }
-    return transformOracleRedeemer(encodedData);
+    return encodedData;
   } catch (error) {
     console.error("Error creating oracle redeemer:", error);
     throw error;
@@ -722,10 +646,7 @@ const main = async () => {
       //   "https://cardano-preview.blockfrost.io/api/v0/",
       //   "previewkUPq78ccpDRbXNQM3YeSg6YhXgq9JoNT"
       // ),
-      new Kupmios(
-        "http://172.16.61.2:1442",
-        "http://172.16.61.4:1337",
-      ),
+      new Kupmios("http://172.16.61.2:1442", "http://172.16.61.4:1337"),
       "Preview"
     );
 
@@ -755,22 +676,15 @@ const main = async () => {
     const collateralAmount = 142770657n;
     const userUtxos = await lucid.wallet().getUtxos();
     const collateralUtxo: UTxO | undefined = userUtxos.find(
-      (utxo) =>
-        utxo.txHash ===
-          "2647ec8e69ad90007309ea5acf137e6946245908791d1cfd81f704054889eb3d" &&
-        utxo.outputIndex === 3
+      (utxo) => utxo.assets[collateralAsset] >= collateralAmount
     );
-
     if (!collateralUtxo) {
       throw new Error(
         `Could not find collateral asset (${collateralAsset}) in your wallet.`
       );
-    }
+    } else console.log({userInput: collateralUtxo})
 
     // 2. Collect Inputs from API
-    // We need to collect inputs separately as they might need different redeemers.
-    // For local testing with a static API response, we can construct the UTxO directly
-    // instead of fetching it from the chain. This avoids errors if the UTxO has been spent.
     const fixedPoolInUtxo: UTxO[] = [
       apiToUtxo(apiResponse.data.inputs.poolInUtxo),
     ];
@@ -783,26 +697,22 @@ const main = async () => {
     if (!floatPoolInUtxo.length)
       throw new Error("Could not find float pool input UTxO.");
 
-    // 4. Add Reference Inputs
-    // type guard
+    // 3. Add Reference Inputs
     const isOutRef = (x: OutRef | null): x is OutRef =>
       x !== null && x !== undefined;
     const refUtxos = apiResponse.data.referenceInputs
-      .filter((ref) => ref.type != "DANOGO_FLOAT_POOL")
-      .map(apiToRefUtxo) // (OutRef | null)[]
-      .filter(isOutRef) // OutRef[]
+      .map(apiToRefUtxo)
+      .filter(isOutRef)
       .sort(
+        // no need to sort but sort to debug easily
         (a, b) =>
           a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
       );
 
-    
     const refUtxosOnChain: UTxO[] = await lucid.utxosByOutRef(refUtxos);
     tx = tx.readFrom(refUtxosOnChain);
 
-    // 3. Add Outputs
-    // We explicitly define the order of outputs to ensure it's deterministic
-    // and matches the order used for calculating redeemer indices.
+    // 4. Add Outputs
     const orderedOutputs = [
       {
         key: "floatPoolOutUtxo",
@@ -814,17 +724,17 @@ const main = async () => {
     ];
 
     for (const { key, value: apiOut } of orderedOutputs) {
-      if (!apiOut) continue; // Skip any null outputs
+      if (!apiOut) continue;
       if (apiOut.coin === "0") {
-        apiOut.coin = "2000000"; // Ensure minimum ADA to avoid "output has no value" errors
-        apiOut.address =
-          "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs";
+        apiOut.coin = "2000000"; // set minAda = 2 for loanOutUtxo
+        // add stake key of user's wallet if needed
+        // apiOut.address =
+        //   "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs";
       }
 
       const assets: Assets = apiToAssets(apiOut.multiAssets, apiOut.coin);
 
       if (apiOut.datum) {
-        // Transform the API datum to match the on-chain schema before serializing.
         const transformedDatum = transformDatum(key, apiOut.datum);
         console.log({ transformedDatum });
         tx = tx.pay.ToAddressWithData(
@@ -840,7 +750,7 @@ const main = async () => {
       }
     }
 
-    // 6. Add Metadata - This is the correct place to attach it.
+    // 5. Add Metadata - This is the correct place to attach it.
     // tx = tx.attachMetadata(674, {
     //   msg: ["Danogo Fixed-Rate Lending: Create Loan"],
     // });
@@ -860,24 +770,18 @@ const main = async () => {
     //   },
     // });
 
-    // 7. Build redeemers now that we have a transaction structure
+    // 6. Build redeemers for spend/mint/withdraw
     console.log("Building redeemers...");
 
     const createLoanRedeemerData: string = await createLoanRedeemer(
-      lucid,
-      collateralUtxo,
-      apiResponse.data as ApiData
+      apiResponse.data, collateralUtxo
     );
     console.log({ createLoanRedeemerData });
     const floatPoolRedeemerData: string = await createFloatPoolRedeemer(
-      lucid,
-      collateralUtxo,
-      apiResponse.data as ApiData
+      apiResponse.data
     );
     console.log({ floatPoolRedeemerData });
     const oracleRedeemerData = await createOracleRedeemer(
-      lucid,
-      collateralUtxo,
       apiResponse.data as ApiData
     ); // Build all redeemers
     console.log({ oracleRedeemerData });
@@ -888,10 +792,9 @@ const main = async () => {
       .collectFrom(fixedPoolInUtxo, createLoanRedeemerData)
       .collectFrom(floatPoolInUtxo, floatPoolRedeemerData);
 
-    // Add withdrawal with a placeholder, as its redeemer will be updated later.
+    // 7. Add withdrawal with a placeholder, as its redeemer will be updated later.
     const withdrawal = apiResponse.data.withdrawal;
     if (withdrawal) {
-      // The API provides the full reward address hex, but we only need the script collectFromhash (the part after the 'f0' header).
       const rewardScriptHash = withdrawal.rewardAddressScriptHash.startsWith(
         "f0"
       )
@@ -920,41 +823,24 @@ const main = async () => {
       for (const asset of mint.assets) {
         const unit = mint.policyId + (asset.name || "");
         mintAssets[unit] = (mintAssets[unit] || 0n) + BigInt(asset.value);
-        console.log({ policy: mint.policyId, redeemer });
       }
       tx = tx.mintAssets(mintAssets, redeemer);
     }
 
+    console.log({ gap: Date.now() - interestTime });
     tx = tx
-      .validFrom(now)
-      .validTo(now + 300000)
-      .setMinFee(170000n)
+      .validFrom(interestTime)
+      .validTo(interestTime + 360000)
+      .setMinFee(17000n)
       .addSigner(await lucid.wallet().address());
 
-    // Log the transaction CBOR before final completion for debugging purposes.
-    // This creates a temporary transaction without running coin selection to get a preview.
-    // const presetUtxos = (await lucid.wallet().getUtxos()).filter(
-    //   (utxo) => utxo.outputIndex === 1 && utxo.txHash === "8122f3a323cdde6a3cead637f309a0321598417497939dc27a0bf34f04f86797"
-    // );
-    // if (presetUtxos.length === 0) throw Error("No UTXO found")
-    const tempTx = await tx.complete({ localUPLCEval: false });
-    console.log({cbor: tempTx.toCBOR()})
-
-    const builtTx = lucid.fromTx(tempTx.toCBOR());
-
-    // 9. Complete, sign, and submit the transaction.
-    // const builtTx = await tx.complete({ setCollateral: 0n, coinSelection: false, presetWalletInputs: presetUtxos });
-    // const builtTx = await tx.complete();
-
-    // Sign with the wallet that was selected from the seed phrase.
+    const builtTx = await tx.complete({ localUPLCEval: false });
     const signedTx = await builtTx.sign.withWallet().complete();
 
     const txHash = await signedTx.submit();
     console.log("Complex transaction submitted successfully!");
     console.log(`Tx Hash: ${txHash}`);
     console.log(`https://preview.cardanoscan.io/transaction/${txHash}`);
-
-    console.log(`Complex transaction submitted with hash: ${txHash}`);
   } catch (err: any) {
     console.error("CompleteTxError:", err?.message || err);
     if (err?.cause) {
