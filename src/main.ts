@@ -9,6 +9,8 @@ import {
   LucidEvolution,
   credentialToRewardAddress,
   TxBuilder,
+  mintingPolicyToId,
+  Kupmios,
 } from "@lucid-evolution/lucid";
 import { apiResponse } from "./apiResponse.js";
 import type { Assets, UTxO, OutRef, Script } from "@lucid-evolution/lucid";
@@ -22,7 +24,7 @@ import type {
   PoolDatum,
 } from "./apiResponse.js";
 import { encodeData } from "./schema.js";
-import { UTxOTarget, OracleUtxoType, UtxoType } from './enum.js'
+import { UTxOTarget, OracleUtxoType, UtxoType } from "./enum.js";
 
 // Filter out problematic reference inputs
 apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
@@ -30,7 +32,11 @@ apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
 );
 
 // Type definitions for better code clarity and safety
-const now = parseInt((apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum).interestTime, 10);
+const now = parseInt(
+  (apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum)
+    .interestTime,
+  10
+);
 const oracleOutputByOutRef = new Map<string, number>();
 
 // IMPORTANT: Replace this with your actual 24-word seed phrase
@@ -50,13 +56,13 @@ const validateCbor = (cborHex: string, description: string): boolean => {
       console.error(`Invalid hex in ${description}:`, cborHex);
       return false;
     }
-    
+
     // Check if even length (valid hex pairs)
     if (cborHex.length % 2 !== 0) {
       console.error(`Odd length hex string in ${description}:`, cborHex);
       return false;
     }
-    
+
     // Try to parse with Lucid's Data.from()
     Data.from(cborHex);
     console.log(`✓ Valid CBOR for ${description}`);
@@ -69,7 +75,10 @@ const validateCbor = (cborHex: string, description: string): boolean => {
 };
 
 // Helper functions to parse API response
-const apiToAssets = (multiAssets: ApiMultiAsset[] | undefined, coin: string): Assets => {
+const apiToAssets = (
+  multiAssets: ApiMultiAsset[] | undefined,
+  coin: string
+): Assets => {
   const assets: Assets = { lovelace: BigInt(coin) };
   if (!multiAssets) return assets;
 
@@ -112,20 +121,20 @@ const apiToRefUtxo = (apiRef: ApiReferenceInput | undefined): OutRef | null => {
 // Enhanced tokenIdToTuple with better error handling
 const tokenIdToTuple = (tokenId: string): [string, Uint8Array] => {
   const emptyBytes = new Uint8Array(0);
-  
+
   if (!tokenId) return ["", emptyBytes];
-  
+
   try {
     const parts = tokenId.split(".");
     if (parts.length === 2) {
       const policy = parts[0] ?? "";
       const assetName = parts[1] ?? "";
-      
+
       // Validate policy ID
       if (policy && !isValidHex(policy)) {
         throw new Error(`Invalid hex policy ID: ${policy}`);
       }
-      
+
       if (assetName.length > 0) {
         if (!isValidHex(assetName)) {
           throw new Error(`Invalid hex asset name: ${assetName}`);
@@ -134,7 +143,7 @@ const tokenIdToTuple = (tokenId: string): [string, Uint8Array] => {
       }
       return [policy, emptyBytes];
     }
-    
+
     // Single part - treat as policy ID
     if (tokenId && !isValidHex(tokenId)) {
       throw new Error(`Invalid hex token ID: ${tokenId}`);
@@ -158,23 +167,31 @@ const createLoanRedeemer = async (
       apiToUtxo(apiData.inputs.floatPoolInUtxo),
       collateralUtxo,
     ].sort(
-      (a, b) => a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
+      (a, b) =>
+        a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
     );
 
     const poolInUtxo = apiToUtxo(apiData.inputs.poolInUtxo);
     const poolInIndex = allInputs.findIndex(
-      (inp) => inp.txHash === poolInUtxo.txHash && inp.outputIndex === poolInUtxo.outputIndex
+      (inp) =>
+        inp.txHash === poolInUtxo.txHash &&
+        inp.outputIndex === poolInUtxo.outputIndex
     );
-    
+
     if (poolInIndex === -1) {
-      throw new Error("Could not find poolInUtxo in transaction script inputs.");
+      throw new Error(
+        "Could not find poolInUtxo in transaction script inputs."
+      );
     }
 
     const refInputs = apiData.referenceInputs
       .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
-      .sort((a, b) => a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex);
+      .sort(
+        (a, b) =>
+          a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
+      );
 
     const fixedProtocolScriptRef = apiToRefUtxo(
       apiData.referenceInputs.find((r) => r.type === "FIXED_PROTOCOL_SCRIPT")
@@ -188,16 +205,20 @@ const createLoanRedeemer = async (
     }
 
     const protocolScriptRefIndex = refInputs.findIndex(
-      (ref) => ref.txHash === fixedProtocolScriptRef.txHash && 
-               ref.outputIndex === fixedProtocolScriptRef.outputIndex
+      (ref) =>
+        ref.txHash === fixedProtocolScriptRef.txHash &&
+        ref.outputIndex === fixedProtocolScriptRef.outputIndex
     );
     const protocolConfigRefIndex = refInputs.findIndex(
-      (ref) => ref.txHash === fixedProtocolConfigRef.txHash && 
-               ref.outputIndex === fixedProtocolConfigRef.outputIndex
+      (ref) =>
+        ref.txHash === fixedProtocolConfigRef.txHash &&
+        ref.outputIndex === fixedProtocolConfigRef.outputIndex
     );
 
     if (protocolScriptRefIndex === -1 || protocolConfigRefIndex === -1) {
-      throw new Error("Could not find required reference inputs in sorted list");
+      throw new Error(
+        "Could not find required reference inputs in sorted list"
+      );
     }
 
     const outputs = [
@@ -254,7 +275,10 @@ const createFloatPoolRedeemer = async (
       .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
-      .sort((a, b) => a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex);
+      .sort(
+        (a, b) =>
+          a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
+      );
 
     const protocolConfigRef = apiToRefUtxo(
       apiData.referenceInputs.find((r) => r.type === "FLOAT_PROTOCOL_CONFIG")
@@ -264,20 +288,26 @@ const createFloatPoolRedeemer = async (
     );
 
     if (!protocolConfigRef || !poolParamsRef) {
-      throw new Error("Missing required reference inputs for float pool redeemer");
+      throw new Error(
+        "Missing required reference inputs for float pool redeemer"
+      );
     }
 
     const protocolCfgRefIdx = refInputs.findIndex(
-      (ref) => ref.txHash === protocolConfigRef.txHash && 
-               ref.outputIndex === protocolConfigRef.outputIndex
+      (ref) =>
+        ref.txHash === protocolConfigRef.txHash &&
+        ref.outputIndex === protocolConfigRef.outputIndex
     );
     const marketRefIdx = refInputs.findIndex(
-      (ref) => ref.txHash === poolParamsRef.txHash && 
-               ref.outputIndex === poolParamsRef.outputIndex
+      (ref) =>
+        ref.txHash === poolParamsRef.txHash &&
+        ref.outputIndex === poolParamsRef.outputIndex
     );
 
     if (protocolCfgRefIdx === -1 || marketRefIdx === -1) {
-      throw new Error("Could not find required reference inputs in sorted list");
+      throw new Error(
+        "Could not find required reference inputs in sorted list"
+      );
     }
 
     const outputs = [
@@ -303,14 +333,21 @@ const createFloatPoolRedeemer = async (
       throw new Error("Could not find floatPoolOutUtxo in transaction outputs");
     }
 
-    const feeOutMaybe = feeOutIndex === -1 
-      ? new Constr(1, []) // Nothing
-      : new Constr(0, [BigInt(feeOutIndex)]); // Just feeOutIndex
+    const feeOutMaybe =
+      feeOutIndex === -1
+        ? new Constr(1, []) // Nothing
+        : new Constr(0, [BigInt(feeOutIndex)]); // Just feeOutIndex
 
     const redeemerCbor = Data.to(
       new Constr(2, [
         BigInt(protocolCfgRefIdx),
-        [new Constr(0, [BigInt(poolOutIndex), feeOutMaybe, BigInt(marketRefIdx)])],
+        [
+          new Constr(0, [
+            BigInt(poolOutIndex),
+            feeOutMaybe,
+            BigInt(marketRefIdx),
+          ]),
+        ],
       ])
     );
 
@@ -370,7 +407,7 @@ const transformLoanDatum = (datum: LoanDatum): string => {
   ];
 
   const encodedData = encodeData(dataArray, LoanDatumSchema);
-  
+
   if (!validateCbor(encodedData, "loan datum")) {
     throw new Error("Generated invalid CBOR for loan datum");
   }
@@ -380,7 +417,7 @@ const transformLoanDatum = (datum: LoanDatum): string => {
 
 const transformPoolDatum = (datum: PoolDatum): string => {
   const TokenIdSchema = Data.Tuple([Data.Bytes(), Data.Bytes()]);
-  
+
   const PoolDatumSchema = Data.Tuple(
     [
       Data.Tuple([TokenIdSchema, TokenIdSchema]), // supplyTokens
@@ -418,10 +455,16 @@ const transformPoolDatum = (datum: PoolDatum): string => {
 
   const dataArray: [
     [[string, string], [string, string]],
-    bigint, bigint, bigint,
+    bigint,
+    bigint,
+    bigint,
     Map<[string, string], bigint>,
-    bigint, bigint, bigint, bigint,
-    boolean, bigint
+    bigint,
+    bigint,
+    bigint,
+    bigint,
+    boolean,
+    bigint
   ] = [
     supplyTokens,
     BigInt(datum.circulatingPTSupply),
@@ -437,20 +480,21 @@ const transformPoolDatum = (datum: PoolDatum): string => {
   ];
 
   const encodedData = encodeData(dataArray, PoolDatumSchema);
-  
+
   if (!validateCbor(encodedData, "pool datum")) {
     throw new Error("Generated invalid CBOR for pool datum");
   }
 
-  return transformString(encodedData) ;
+  return transformString(encodedData);
 };
 
 const transformFloatPoolDatum = (datum: FloatPoolDatum): string => {
   const alternativeSupplyTokensRate = (datum.alternativeSupplyTokens || []).map(
-    (token) => new Constr(0, [
-      BigInt(token.latestExchangeRateNum),
-      BigInt(token.latestExchangeRateDen),
-    ])
+    (token) =>
+      new Constr(0, [
+        BigInt(token.latestExchangeRateNum),
+        BigInt(token.latestExchangeRateDen),
+      ])
   );
 
   const dataArray = [
@@ -465,7 +509,7 @@ const transformFloatPoolDatum = (datum: FloatPoolDatum): string => {
   ];
 
   const encodedData = Data.to(new Constr(0, dataArray));
-  
+
   if (!validateCbor(encodedData, "float pool datum")) {
     throw new Error("Generated invalid CBOR for float pool datum");
   }
@@ -484,7 +528,10 @@ const createOracleRedeemer = async (
       .filter((r) => r.type !== "DANOGO_FLOAT_POOL")
       .map(apiToRefUtxo)
       .filter((r): r is OutRef => r !== null)
-      .sort((a, b) => a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex);
+      .sort(
+        (a, b) =>
+          a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
+      );
 
     const oracleSourceRef = apiToRefUtxo(
       apiData.referenceInputs.find((r) => r.type === "ORACLE_CONFIG")
@@ -498,13 +545,15 @@ const createOracleRedeemer = async (
     }
 
     const sourceRefIndex = refInputs.findIndex(
-      (ref) => ref.txHash === oracleSourceRef.txHash && 
-               ref.outputIndex === oracleSourceRef.outputIndex
+      (ref) =>
+        ref.txHash === oracleSourceRef.txHash &&
+        ref.outputIndex === oracleSourceRef.outputIndex
     );
     const pathRefIndexes = oraclePathRefs.map((pathRef) =>
       refInputs.findIndex(
-        (ref) => ref.txHash === pathRef!.txHash && 
-                 ref.outputIndex === pathRef!.outputIndex
+        (ref) =>
+          ref.txHash === pathRef!.txHash &&
+          ref.outputIndex === pathRef!.outputIndex
       )
     );
 
@@ -533,7 +582,9 @@ const createOracleRedeemer = async (
     });
 
     const oracleUTxOTypes = new Set<string>(
-      Object.values(OracleUtxoType).filter((v) => typeof v === "string") as string[]
+      Object.values(OracleUtxoType).filter(
+        (v) => typeof v === "string"
+      ) as string[]
     );
 
     const oracleRefByType = new Map<string, Set<string>>();
@@ -586,7 +637,8 @@ const createOracleRedeemer = async (
     });
 
     const pricesMap = new Map<any, any>();
-    const priceGroups = (apiData.withdrawal?.withdrawalRedeemer?.prices ?? []) as any[];
+    const priceGroups = (apiData.withdrawal?.withdrawalRedeemer?.prices ??
+      []) as any[];
     for (const pg of priceGroups) {
       const borrowKey = tokenIdToTuple(pg.borrowToken).map((v) =>
         v instanceof Uint8Array ? toHex(v) : v
@@ -605,7 +657,8 @@ const createOracleRedeemer = async (
     }
 
     const borrowRatesMap = new Map<any, any>();
-    const brs = (apiData.withdrawal?.withdrawalRedeemer?.borrowRates ?? []) as any[];
+    const brs = (apiData.withdrawal?.withdrawalRedeemer?.borrowRates ??
+      []) as any[];
     for (const br of brs) {
       borrowRatesMap.set(
         tokenIdToTuple(br.yieldToken).map((v) =>
@@ -625,12 +678,15 @@ const createOracleRedeemer = async (
         Data.Integer(), // oracleSourceIndex
         Data.Array(Data.Integer()), // oraclePathIndexes
         Data.Array(Data.Tuple([Data.Any(), Data.Any(), Data.Integer()])), // oracleIndexes
-        Data.Map(TokenIdSchema, Data.Map(TokenIdSchema, RationalSchema, {minItems: 3, maxItems: 3}), {minItems: 1, maxItems: 1}), // pricesMap
-        Data.Map(TokenIdSchema, Data.Integer(), {minItems: 1, maxItems: 1}), // borrowRatesMap
+        Data.Map(
+          TokenIdSchema,
+          Data.Map(TokenIdSchema, RationalSchema, { minItems: 3, maxItems: 3 }),
+          { minItems: 1, maxItems: 1 }
+        ), // pricesMap
+        Data.Map(TokenIdSchema, Data.Integer(), { minItems: 1, maxItems: 1 }), // borrowRatesMap
       ],
       { hasConstr: true }
     );
-
     const redeemerData: [
       bigint,
       bigint[],
@@ -646,7 +702,7 @@ const createOracleRedeemer = async (
     ];
 
     const encodedData = encodeData(redeemerData, OracleRedeemerSchema);
-    
+
     if (!validateCbor(encodedData, "oracle redeemer")) {
       throw new Error("Generated invalid CBOR for oracle redeemer");
     }
@@ -662,9 +718,13 @@ const main = async () => {
 
   try {
     const lucid: LucidEvolution = await Lucid(
-      new Blockfrost(
-        "https://cardano-preview.blockfrost.io/api/v0",
-        "previewFXVEf9xh8CIKeXDimSww7HCUumrxN22w"
+      // new Blockfrost(
+      //   "https://cardano-preview.blockfrost.io/api/v0/",
+      //   "previewkUPq78ccpDRbXNQM3YeSg6YhXgq9JoNT"
+      // ),
+      new Kupmios(
+        "http://172.16.61.2:1442",
+        "http://172.16.61.4:1337",
       ),
       "Preview"
     );
@@ -695,7 +755,10 @@ const main = async () => {
     const collateralAmount = 142770657n;
     const userUtxos = await lucid.wallet().getUtxos();
     const collateralUtxo: UTxO | undefined = userUtxos.find(
-      (utxo) => utxo.txHash === "b650559db26322a1c3a724a3d6c1791c92fd7617902d9f1dd21626e9fca3cb06" && utxo.outputIndex === 0
+      (utxo) =>
+        utxo.txHash ===
+          "2647ec8e69ad90007309ea5acf137e6946245908791d1cfd81f704054889eb3d" &&
+        utxo.outputIndex === 3
     );
 
     if (!collateralUtxo) {
@@ -720,6 +783,23 @@ const main = async () => {
     if (!floatPoolInUtxo.length)
       throw new Error("Could not find float pool input UTxO.");
 
+    // 4. Add Reference Inputs
+    // type guard
+    const isOutRef = (x: OutRef | null): x is OutRef =>
+      x !== null && x !== undefined;
+    const refUtxos = apiResponse.data.referenceInputs
+      .filter((ref) => ref.type != "DANOGO_FLOAT_POOL")
+      .map(apiToRefUtxo) // (OutRef | null)[]
+      .filter(isOutRef) // OutRef[]
+      .sort(
+        (a, b) =>
+          a.txHash.localeCompare(b.txHash) || a.outputIndex - b.outputIndex
+      );
+
+    
+    const refUtxosOnChain: UTxO[] = await lucid.utxosByOutRef(refUtxos);
+    tx = tx.readFrom(refUtxosOnChain);
+
     // 3. Add Outputs
     // We explicitly define the order of outputs to ensure it's deterministic
     // and matches the order used for calculating redeemer indices.
@@ -737,19 +817,16 @@ const main = async () => {
       if (!apiOut) continue; // Skip any null outputs
       if (apiOut.coin === "0") {
         apiOut.coin = "2000000"; // Ensure minimum ADA to avoid "output has no value" errors
-        // addr_test1wrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pgemsun9
         apiOut.address =
           "addr_test1zrs6vjp5wwjavyyw6tkh73f294dnhmz6a2a7xvalte4j2pg8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asywgcfs";
       }
 
       const assets: Assets = apiToAssets(apiOut.multiAssets, apiOut.coin);
-     
+
       if (apiOut.datum) {
         // Transform the API datum to match the on-chain schema before serializing.
         const transformedDatum = transformDatum(key, apiOut.datum);
-        console.log({transformedDatum})
-        if (apiOut.address === "addr_test1zralu95guc0lpefd58xt4udn5cquv6m8qfedmd0pjl9rn0g8gkm7g90pw4l5edvw8ny96ykpqyrcy9z5dzqv4es4r2asu0esez")
-          console.log({assets})
+        console.log({ transformedDatum });
         tx = tx.pay.ToAddressWithData(
           apiOut.address,
           {
@@ -763,37 +840,25 @@ const main = async () => {
       }
     }
 
-    // 4. Add Reference Inputs
-    // type guard
-    const isOutRef = (x: OutRef | null): x is OutRef =>
-      x !== null && x !== undefined;
-    const refUtxos = apiResponse.data.referenceInputs
-      .filter(ref => ref.type != "DANOGO_FLOAT_POOL")
-      .map(apiToRefUtxo) // (OutRef | null)[]
-      .filter(isOutRef); // OutRef[]
-
-    const refUtxosOnChain: UTxO[] = await lucid.utxosByOutRef(refUtxos);
-    tx = tx.readFrom(refUtxosOnChain);
-
     // 6. Add Metadata - This is the correct place to attach it.
-    tx = tx.attachMetadata(674, {
-      msg: ["Danogo Fixed-Rate Lending: Create Loan"],
-    });
-    tx = tx.attachMetadata(721, {
-      version: 2,
-      e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505: {
-        "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": {
-          debt: "101.69644 ADA",
-          name: "Borrower NFT (Fixed Rate Lending)",
-          image: "ipfs://QmWpzeJwioirfFWFwDvxmETjemo2yVbnk16zz74U6a46Gz",
-          website: "https://danogo.io",
-          duration: "60 days",
-          maturity: "2025-09-25 12:41:34 UTC",
-          description:
-            "An NFT representing the loan principal and interest by Danogo",
-        },
-      },
-    });
+    // tx = tx.attachMetadata(674, {
+    //   msg: ["Danogo Fixed-Rate Lending: Create Loan"],
+    // });
+    // tx = tx.attachMetadata(721, {
+    //   version: 2,
+    //   e1a6483473a5d6108ed2ed7f452a2d5b3bec5aeabbe333bf5e6b2505: {
+    //     "60c037785ac6ac5b60f13389dc7e8af9ef60de53cc38ff2cfd669123f82571fd": {
+    //       debt: "101.69644 ADA",
+    //       name: "Borrower NFT (Fixed Rate Lending)",
+    //       image: "ipfs://QmWpzeJwioirfFWFwDvxmETjemo2yVbnk16zz74U6a46Gz",
+    //       website: "https://danogo.io",
+    //       duration: "60 days",
+    //       maturity: "2025-09-25 12:41:34 UTC",
+    //       description:
+    //         "An NFT representing the loan principal and interest by Danogo",
+    //     },
+    //   },
+    // });
 
     // 7. Build redeemers now that we have a transaction structure
     console.log("Building redeemers...");
@@ -818,9 +883,10 @@ const main = async () => {
     console.log({ oracleRedeemerData });
 
     // Now that we have the final redeemers, we can collect the script inputs.
-    tx = tx.collectFrom(fixedPoolInUtxo,createLoanRedeemerData );
-    tx = tx.collectFrom(floatPoolInUtxo, floatPoolRedeemerData);
-    tx = tx.collectFrom([collateralUtxo]);
+    tx = tx
+      .collectFrom([collateralUtxo])
+      .collectFrom(fixedPoolInUtxo, createLoanRedeemerData)
+      .collectFrom(floatPoolInUtxo, floatPoolRedeemerData);
 
     // Add withdrawal with a placeholder, as its redeemer will be updated later.
     const withdrawal = apiResponse.data.withdrawal;
@@ -854,25 +920,31 @@ const main = async () => {
       for (const asset of mint.assets) {
         const unit = mint.policyId + (asset.name || "");
         mintAssets[unit] = (mintAssets[unit] || 0n) + BigInt(asset.value);
+        console.log({ policy: mint.policyId, redeemer });
       }
       tx = tx.mintAssets(mintAssets, redeemer);
     }
 
-    tx = tx.validFrom(now);
-    tx = tx.validTo(now + 360000); // 6 minutes validity
+    tx = tx
+      .validFrom(now)
+      .validTo(now + 300000)
+      .setMinFee(170000n)
+      .addSigner(await lucid.wallet().address());
 
     // Log the transaction CBOR before final completion for debugging purposes.
     // This creates a temporary transaction without running coin selection to get a preview.
-    const presetUtxos = (await lucid.wallet().getUtxos()).filter(
-      (utxo) => utxo.outputIndex === 1 && utxo.txHash === "b650559db26322a1c3a724a3d6c1791c92fd7617902d9f1dd21626e9fca3cb06"
-    );
-    // const tempTx = await tx.complete({ setCollateral: 0n, coinSelection: false, presetWalletInputs: presetUtxos, localUPLCEval: false });
-    // console.log({cbor: tempTx.toCBOR()})
+    // const presetUtxos = (await lucid.wallet().getUtxos()).filter(
+    //   (utxo) => utxo.outputIndex === 1 && utxo.txHash === "8122f3a323cdde6a3cead637f309a0321598417497939dc27a0bf34f04f86797"
+    // );
+    // if (presetUtxos.length === 0) throw Error("No UTXO found")
+    const tempTx = await tx.complete({ localUPLCEval: false });
+    console.log({cbor: tempTx.toCBOR()})
 
+    const builtTx = lucid.fromTx(tempTx.toCBOR());
 
     // 9. Complete, sign, and submit the transaction.
     // const builtTx = await tx.complete({ setCollateral: 0n, coinSelection: false, presetWalletInputs: presetUtxos });
-    const builtTx = await tx.complete();
+    // const builtTx = await tx.complete();
 
     // Sign with the wallet that was selected from the seed phrase.
     const signedTx = await builtTx.sign.withWallet().complete();
@@ -895,8 +967,8 @@ const main = async () => {
 main();
 
 const transformOracleRedeemer = (cborString: string): string => {
-  // 1. First, replace all occurrences of "ffff" with "ff".
-  const modifiedString = cborString.replace(/ffff/g, "ff");
+  // 1. First, replace all occurrences of "ffffff" with "ff".
+  const modifiedString = cborString.replace(/ffffff/g, "ff");
 
   // 2. Now, find all occurrences of "bf9f" in the *modified* string.
   const occurrences: number[] = [];
@@ -907,16 +979,27 @@ const transformOracleRedeemer = (cborString: string): string => {
   }
 
   if (occurrences.length < 3) {
-    console.warn(`Expected at least 3 occurrences of "bf9f", but found ${occurrences.length}. Returning original string.`);
+    console.warn(
+      `Expected at least 3 occurrences of "bf9f", but found ${occurrences.length}. Returning original string.`
+    );
     return cborString;
   }
 
   // 3. Perform the replacements for "bf9f" on the modified string.
   let result = modifiedString;
-  result = result.substring(0, occurrences[0]) + "a19f" + result.substring(occurrences[0] + 4);
-  result = result.substring(0, occurrences[1]) + "a39f" + result.substring(occurrences[1] + 4);
-  result = result.substring(0, occurrences[2]) + "a19f" + result.substring(occurrences[2] + 4);
-  return result;
+  result =
+    result.substring(0, occurrences[0]) +
+    "a19f" +
+    result.substring(occurrences[0] + 4);
+  result =
+    result.substring(0, occurrences[1]) +
+    "a39f" +
+    result.substring(occurrences[1] + 4);
+  result =
+    result.substring(0, occurrences[2]) +
+    "a19f" +
+    result.substring(occurrences[2] + 4);
+  return result.substring(0, result.length - 2);
 };
 
 function transformString(originalString: string): string {
