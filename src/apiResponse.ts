@@ -3,7 +3,7 @@ import axios from "axios";
 
 const apiRequestBody = {
     poolId:
-      "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd.c72ac0913e3ec1f589ac36fe20129b345ce8a4e684055e6489bcc4ec",
+      "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd.046f6a13b524d5884e49d2262bf4d261153d0501b78acb3f9fa9fb67",
     borrowAmount: "100000000",
     loanDuration: "60",
     collaterals: [
@@ -15,7 +15,7 @@ const apiRequestBody = {
     ],
   };
 const response = await axios.post(
-    "http://localhost:10080/api/v1/get-create-fixed-loan-params",
+    "https://danogo-lending-preview.tekoapis.net/api/v1/get-create-fixed-loan-params",
     apiRequestBody
   );
   export  const apiResponse = response.data as ApiResponse;

@@ -646,7 +646,7 @@ const main = async () => {
       //   "https://cardano-preview.blockfrost.io/api/v0/",
       //   "previewkUPq78ccpDRbXNQM3YeSg6YhXgq9JoNT"
       // ),
-      new Kupmios("http://172.16.61.2:1442", "http://172.16.61.4:1337"),
+      new Kupmios("https://kupo1tj2lsutwa9lhyend373.preview-v2.kupo-m1.demeter.run", "https://ogmios1zpmknz7hs6sx2eegtcw.preview-v6.ogmios-m1.demeter.run"),
       "Preview"
     );
 
