@@ -1,25 +1,58 @@
-
+import { stringify } from "@lucid-evolution/lucid";
 import axios from "axios";
 
 const apiRequestBody = {
-    poolId:
-      "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd.046f6a13b524d5884e49d2262bf4d261153d0501b78acb3f9fa9fb67",
-    borrowAmount: "100000000",
-    loanDuration: "60",
-    collaterals: [
-      {
-        collateralToken:
-          "919d4c2c9455016289341b1a14dedf697687af31751170d56a31466e.74444a4544",
-        collateralAmount: "142770657",
-      },
-    ],
-  };
+  poolId:
+    "fbfe1688e61ff0e52da1ccbaf1b3a601c66b670272ddb5e197ca39bd.1688f720d6127481f52c543f61addfdddbf5fcb5358da80b91512599",
+  borrowAmount: "100000000",
+  loanDuration: "60",
+  collaterals: [
+    {
+      collateralToken:
+        "919d4c2c9455016289341b1a14dedf697687af31751170d56a31466e.74444a4544",
+      collateralAmount: "142770657",
+    },
+  ],
+};
 const response = await axios.post(
-    "https://danogo-lending-preview.tekoapis.net/api/v1/get-create-fixed-loan-params",
-    apiRequestBody
+  "https://danogo-lending-preview.tekoapis.net/api/v1/get-create-fixed-loan-params",
+  apiRequestBody
+);
+const apiResponse = response.data as ApiResponse;
+// Get interestTime to set valid start and loan maturity
+export const interestTime = parseInt(
+  (apiResponse.data.outputs.floatPoolOutUtxo!.datum! as FloatPoolDatum)
+    .interestTime,
+  10
+);
+console.log({ apiResponse: stringify(apiResponse) });
+
+// Custom apiResponse
+
+// ignore DANOGO_STAKING_SCRIPT if don't borrow from danogo staking (borrow from float only)
+if (apiResponse.data.outputs.stakingContractOutUtxo === null) {
+  apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
+    (ref) => ref.type != "DANOGO_STAKING_SCRIPT"
   );
-  export  const apiResponse = response.data as ApiResponse;
-  console.log({apiResponse})
+}
+
+const referenceInputByType = new Map<string, Set<string>>();
+apiResponse.data.referenceInputs.forEach((refInput) => {
+  if (!referenceInputByType.has(refInput.type)) {
+    referenceInputByType.set(refInput.type, new Set());
+  }
+  referenceInputByType.get(refInput.type)?.add(refInput.outRef);
+});
+
+// remove floatPoolInUtxo from reference input
+apiResponse.data.referenceInputs = apiResponse.data.referenceInputs.filter(
+  (ref) => ref.type != "DANOGO_FLOAT_POOL"
+);
+
+const { inputs: apiInputs, outputs: apiOutputs, mint: apiMint, withdrawal: apiWithdrawal, referenceInputs: apiRefInputs} = apiResponse.data;
+
+export { apiInputs, apiOutputs, apiMint, apiWithdrawal, apiRefInputs, referenceInputByType };
+
 export interface ApiResponse {
   code: number;
   traceId: string;
@@ -155,7 +188,27 @@ export interface FloatPoolDatum {
   }[];
 }
 
-export type ApiDatum = PoolDatum | LoanDatum | FloatPoolDatum;
+export interface StakingPoolDatum {
+  totalSupply: string;
+  circulatingSToken: string;
+  validUntil: string;
+}
+
+export interface LiqwidPoolDatum {
+  supplyChanged: string;
+  mintChanged: string;
+  principal: string;
+  interest: string;
+  minInterest: string;
+  poolIndex: string;
+}
+
+export type ApiDatum =
+  | PoolDatum
+  | LoanDatum
+  | FloatPoolDatum
+  | StakingPoolDatum
+  | LiqwidPoolDatum;
 
 // ---- UTxO ----
 
