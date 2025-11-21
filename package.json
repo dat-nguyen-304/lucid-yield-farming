@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node --loader ts-node/esm src/main.ts",
     "build": "tsc",
-    "start": "npm run build && node dist/main.js"
+    "create-loan": "npm run build && node dist/main.js",
+    "swap": "npm run build && node dist/lp.js",
+    "test": "npm run build && node dist/simple.js"
   },
   "dependencies": {
     "@lucid-evolution/lucid": ">=0.4.25",
